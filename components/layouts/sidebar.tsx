@@ -1,19 +1,38 @@
-import { HelpCircle, Package2, Settings } from 'lucide-react'
+'use client'
+import { HelpCircle } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './sidebar-item'
 import { boardMenu } from '@/app/board/menu'
+import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 
 const Sidebar = () => {
+  const pathname: string = usePathname()
+
   return (
-    <aside className='fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex'>
-      <nav className='flex flex-col items-center gap-4 px-2 sm:py-5'>
-        {boardMenu.map(({ label, to, icon }, _) => (
-          <SidebarItem key={label} label={label} to={to} icon={icon} />
-        ))}
-      </nav>
-      <nav className='mt-auto flex flex-col items-center gap-4 px-2 sm:py-5'>
-        <SidebarItem to='/' label='Help' icon={<HelpCircle />} />
-      </nav>
+    <aside className='fixed inset-y-0 left-0 z-10 hidden w-28 flex flex-col items-center justify-between border-r bg-background sm:flex'>
+      <div>
+        <Image alt='jdraw logo' src='/logo.svg' width={70} height={50} />
+      </div>
+      <div>
+        <nav className='flex flex-col items-center gap-12 px-2 sm:py-5'>
+          {boardMenu.map(({ label, to, icon }, _) => (
+            <SidebarItem
+              key={label}
+              label={label}
+              to={to}
+              icon={icon}
+              isActive={pathname === to}
+            />
+          ))}
+        </nav>
+      </div>
+
+      <div>
+        <nav className='mt-auto flex flex-col items-center gap-4 px-2 sm:py-5'>
+          <SidebarItem to='/' label='Aide' icon={<HelpCircle />} isActive />
+        </nav>
+      </div>
     </aside>
   )
 }

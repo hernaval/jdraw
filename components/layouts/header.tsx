@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@radix-ui/react-dropdown-menu'
-import { PanelLeft, Link, Search, User } from 'lucide-react'
+import { PanelLeft, Link, Search, User, LogOut } from 'lucide-react'
 
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -56,13 +56,14 @@ const Header = () => {
             <User className='overflow-hidden rounded' />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Administrateur</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Support</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>Logout</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Button className='destructure'>
+              <LogOut className='mr-2' /> Se déconnecter
+            </Button>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -40,3 +40,12 @@ export const boardMenu: SidebarItemProps[] = [
     icon: <Trophy className='h-8 w-8' />,
   },
 ]
+
+export const pathToTitleMap: { [key: string]: string } = {
+  '^/board': 'Général',
+  '^/board/outline': 'Règlements',
+  '^/board/delegation': 'Délégations',
+  '^/board/draw': 'Tirage au sort',
+  '^/board/match': 'Tableaux',
+  '^/board/results': 'Résultats',
+}

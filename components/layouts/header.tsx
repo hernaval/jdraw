@@ -13,6 +13,7 @@ import { PanelLeft, Link, Search, User, LogOut } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { boardMenu } from '@/app/board/menu'
+import HeaderTitle from './header-title'
 
 const Header = () => {
   return (
@@ -38,7 +39,7 @@ const Header = () => {
           </nav>
         </SheetContent>
       </Sheet>
-      <h1 className='text-3xl font-bold'>Nom de la page</h1>
+      <HeaderTitle />
       <div className='relative ml-auto flex-1 md:grow-0'>
         <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
         <Input

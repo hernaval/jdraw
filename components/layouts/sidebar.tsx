@@ -30,7 +30,12 @@ const Sidebar = () => {
 
       <div>
         <nav className='mt-auto flex flex-col items-center gap-4 px-2 sm:py-5'>
-          <SidebarItem to='/' label='Aide' icon={<HelpCircle />} isActive />
+          <SidebarItem
+            to='/'
+            label='Aide'
+            icon={<HelpCircle />}
+            isActive={false}
+          />
         </nav>
       </div>
     </aside>

@@ -11,9 +11,21 @@ datasource db {
 model Club {
   id Int @id @default(autoincrement())
   name String @unique
+  athlets Athlet[]
 }
 
 model WeightCategory {
   id Int @id @default(autoincrement())
   label String
+}
+
+model Athlet {
+  id Int @id @default(autoincrement())
+  firstname String
+  lastname String 
+  weight String 
+  photoUrl String
+  sex String 
+   club Club @relation(fields: [clubId], references: [id])
+   clubId Int
 }

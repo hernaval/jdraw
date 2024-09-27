@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  Jboard_database:
+    image: postgres:13.2
+    container_name: jboard_postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: jboard_pgadmin4
+    restart: always
+    ports:
+      - "7002:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: postgres

@@ -1,4 +1,4 @@
-export interface WeightCategory {
+export interface WeightCategoryEntity {
   id: number
   label: string
 }

@@ -1,4 +1,4 @@
-export interface Club {
+export interface ClubEntity {
   id: number
   name: string
 }

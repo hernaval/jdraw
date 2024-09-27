@@ -4,7 +4,7 @@ import { FilterSelect } from '@/types/FilterSelect'
 import { Club } from '@/types/model/Club'
 import { WeightCategory } from '@/types/model/WeightCategory'
 import Link from 'next/link'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const clubs: Club[] = [
   { id: 1, name: 'CJC' },
@@ -32,7 +32,9 @@ const filters: FilterSelect[] = [
 const DelegationList = () => {
   return (
     <div>
-      <Filter title='Filtre' filters={filters} />
+      <Suspense>
+        <Filter title='Filtre' filters={filters} />
+      </Suspense>
       <ul>
         <li>List judoka</li>
         <li>Tableau categorie/club/nb participants</li>

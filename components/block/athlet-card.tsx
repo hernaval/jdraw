@@ -8,7 +8,7 @@ interface AthetCardProps {
 }
 const AthletCard: React.FC<AthetCardProps> = ({ athlet }) => {
   return (
-    <Card>
+    <Card className='h-24'>
       <CardContent className='grid p-4'>
         <div className='flex items-center gap-4 w-full'>
           <div className='flex flex-col items-center justify-center'>

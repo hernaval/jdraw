@@ -4,7 +4,7 @@ export interface ParticipantSummary {
   overall: number
 }
 
-interface Clubs {
+export interface Clubs {
   name: string
   participants: number[]
   total: number

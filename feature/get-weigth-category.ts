@@ -5,5 +5,10 @@ export const getWeighCategory = async (): Promise<WeightCategoryEntity[]> => {
   const weights = await prisma.weightCategory.findMany({
     orderBy: { label: 'asc' },
   })
-  return weights.map(c => ({ ...c }))
+  weights.sort((a, b) => Math.abs(Number(a.label)) - Math.abs(Number(b.label)))
+
+  return [
+    ...weights.filter(w => w.sex == 'F'),
+    ...weights.filter(w => w.sex == 'M'),
+  ]
 }

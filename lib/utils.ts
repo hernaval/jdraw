@@ -10,11 +10,17 @@ export function mapObSelect(
   objects: any[],
   idKey: string,
   labelKey: string,
-  valueKey: string
+  valueKey: string,
+  groupKey: string | null
 ): SelectBoxData[] {
   const selectBoxData: SelectBoxData[] = []
   objects.forEach(o => {
-    selectBoxData.push({ id: o[idKey], label: o[labelKey], value: o[valueKey] })
+    selectBoxData.push({
+      id: o[idKey],
+      label: o[labelKey],
+      value: o[valueKey],
+      group: groupKey ? o[groupKey] : null,
+    })
   })
   return selectBoxData
 }

@@ -17,6 +17,12 @@ model Club {
 model WeightCategory {
   id Int @id @default(autoincrement())
   label String
+  sex Sex @default(M)
+}
+
+enum Sex {
+  M 
+  F
 }
 
 model Athlet {

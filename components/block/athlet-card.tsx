@@ -26,7 +26,7 @@ const AthletCard: React.FC<AthetCardProps> = ({ athlet }) => {
               {athlet.firstname} {athlet.lastname}
             </p>
             <p className='text-sm text-muted-foreground'>
-              Catégorie -<span className='font-bold'>{athlet.weight}kg</span>
+              Catégorie <span className='font-bold'>{athlet.weight}kg</span>
             </p>
           </div>
           <div className='ml-auto font-medium '>{athlet.sex}</div>

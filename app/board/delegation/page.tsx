@@ -30,12 +30,14 @@ const DelegationList = async ({ searchParams }: any) => {
     {
       key: 'club',
       label: 'Choisir un club',
-      data: mapObSelect(clubs, 'id', 'name', 'name'),
+      data: mapObSelect(clubs, 'id', 'name', 'name', null),
+      groupable: false,
     },
     {
       key: 'category',
       label: 'Choisir une catégorie',
-      data: mapObSelect(weights, 'id', 'label', 'label'),
+      data: mapObSelect(weights, 'id', 'label', 'label', 'sex'),
+      groupable: true,
     },
   ]
 

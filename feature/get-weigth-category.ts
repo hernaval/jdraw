@@ -5,5 +5,5 @@ export const getWeighCategory = async (): Promise<WeightCategoryEntity[]> => {
   const weights = await prisma.weightCategory.findMany({
     orderBy: { label: 'asc' },
   })
-  return weights.map(c => ({ id: c.id, label: c.label }))
+  return weights.map(c => ({ ...c }))
 }

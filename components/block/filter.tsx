@@ -24,7 +24,6 @@ const Filter: React.FC<FilterProps> = ({ title, filters }) => {
     },
     [searchParams]
   )
-  const putQueryString = () => {}
 
   const handleChange = (value: string, key: string) => {
     console.log(`omit value from ${key} with value : ${value}`)
@@ -36,6 +35,7 @@ const Filter: React.FC<FilterProps> = ({ title, filters }) => {
       <div className='flex'>
         {filters.map((f, i) => (
           <SelectBox
+            groupable={f.groupable}
             key={f.key}
             label={f.label}
             data={f.data}
@@ -43,13 +43,6 @@ const Filter: React.FC<FilterProps> = ({ title, filters }) => {
           />
         ))}
       </div>
-      {/* <div>
-        <Button size='sm' className='ml-4' onClick={putQueryString}>
-          <span className='sr-only sm:not-sr-only sm:whitespace-nowrap'>
-            Filtrer
-          </span>
-        </Button>
-      </div> */}
     </div>
   )
 }

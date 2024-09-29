@@ -35,7 +35,6 @@ const SelectBox: React.FC<SelectBoxProps> = ({
     {}
   )
 
-  console.log(groupedData)
   return (
     <div className='m-1'>
       <Select onValueChange={onChange}>

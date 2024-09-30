@@ -8,6 +8,7 @@ export async function sendDelegationList(
   prevState: any,
   form: FormData
 ) {
+  // verify if delegation list already sent and validated
   console.log('delegation list', athlets)
   try {
     const athletsDao = athlets.map(({ club, id, ...athlet }) => ({

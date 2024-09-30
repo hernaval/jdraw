@@ -26,7 +26,6 @@ const DelegationChecking = async () => {
     <div className=''>
       <div className='flex justify-between'>
         <Filter title='Filtre' filters={filters} />
-        <Button>Valider</Button>
       </div>
 
       <AthletPerClub />

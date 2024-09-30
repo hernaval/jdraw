@@ -31,6 +31,7 @@ model Athlet {
   lastname String 
   weight String 
   photoUrl String
+  birthdate String @default("01/01/1970")
   sex String 
    club Club @relation(fields: [clubId], references: [id])
    clubId Int

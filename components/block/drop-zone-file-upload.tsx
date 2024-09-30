@@ -1,6 +1,6 @@
 'use client'
 
-import React, { Suspense, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import DropFileUploader from '../form/drop-file-uploader'
 import { ScrollText } from 'lucide-react'
 import readXlsxFile from 'read-excel-file'
@@ -18,14 +18,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '../ui/dialog'
 import { sendDelegationList } from '@/feature/delegation/send-delegation-list'
+import { formatDateAs } from '@/lib/date'
+import { useFormState } from 'react-dom'
+
+const initialState = {
+  code: 200,
+  message: '',
+}
 const DropZoneFileUpload = () => {
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [athlets, setAthlets] = useState<AthletEntity[]>([])
   const formRef = useRef<HTMLFormElement | null>(null)
+  const sendAsAthletList = sendDelegationList.bind(null, athlets)
+  const [state, formAction] = useFormState(sendAsAthletList, initialState)
   const handleFileUpload = async (file: File) => {
     const read = new Promise((resolve, reject) => {
       readXlsxFile(file).then(rows => {
@@ -81,7 +89,17 @@ const DropZoneFileUpload = () => {
     formRef.current?.requestSubmit()
   }
 
-  const sendAsAthletList = sendDelegationList.bind(null, athlets)
+  useEffect(() => {
+    if (state.code == 201) {
+      toast({
+        variant: 'default',
+        title: 'Traitement terminé',
+        duration: 3000,
+        description:
+          "La liste d'engagement de cette délégation est désormais validée et fermée.",
+      })
+    }
+  }, [state.code])
 
   return (
     <div>
@@ -94,7 +112,7 @@ const DropZoneFileUpload = () => {
 
       {athlets.length > 0 && (
         <Suspense fallback={'Loading...'}>
-          <form className='mt-8' action={sendAsAthletList} ref={formRef}>
+          <form className='mt-8' action={formAction} ref={formRef}>
             <h2 className='text-2xl '>Liste d'engagement </h2>
             <Editable
               header={[
@@ -120,7 +138,13 @@ const DropZoneFileUpload = () => {
                       name='firstname'
                     />
                   </TableCell>
-                  <TableCell>{a.birthdate}</TableCell>
+                  <TableCell>
+                    <Input
+                      type='text'
+                      defaultValue={formatDateAs(a.birthdate, 'dd/MM/yyyy')}
+                      name='birthdate'
+                    />
+                  </TableCell>
                   <TableCell>{a.sex}</TableCell>
                   <TableCell>{a.weight}</TableCell>
                 </TableRow>

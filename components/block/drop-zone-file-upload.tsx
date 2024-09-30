@@ -26,54 +26,55 @@ const DropZoneFileUpload = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [athlets, setAthlets] = useState<AthletEntity[]>([])
   const formRef = useRef<HTMLFormElement | null>(null)
-  // const handleFileUpload = async (file: File) => {
-  //   const read = new Promise((resolve, reject) => {
+  const handleFileUpload = async (file: File) => {
+    const read = new Promise((resolve, reject) => {
+      readXlsxFile(file).then(rows => {
+        if (!isFileValid(rows)) {
+          reject()
+        }
+        const sheetRows: AthletEntity[] = []
+        for (let i = 8; i < rows.length; i++) {
+          sheetRows.push({
+            id: i,
+            club: { id: Number(rows[0][1]) },
+            firstname: rows[i][0].toString(),
+            lastname: rows[i][1].toString(),
+            photoUrl: '',
+            sex: rows[i][3].toString(),
+            weight: rows[i][4].toString(),
+            birthdate: rows[i][2].toString(),
+          })
+        }
+        resolve(sheetRows)
+      })
+    })
 
-  //     readXlsxFile(file).then(rows => {
-  //       if (!isFileValid(rows)) {
-  //         reject()
-  //       }
-  //       const sheetRows: AthletEntity[] = []
-  //     for (let i = 8; i < rows.length; i++) {
-  //       sheetRows.push({
-  //         id: i,
-  //         club: { id: Number(rows[0][1]) },
-  //         firstname: rows[i][0].toString(),
-  //         lastname: rows[i][1].toString(),
-  //         photoUrl: '',
-  //         sex: rows[i][3].toString(),
-  //         weight: rows[i][4].toString(),
-  //         birthdate: rows[i][2].toString()
-  //       })
-  //     }
-  //     resolve(sheetRows)
-  //   })
-  // })
+    read
+      .then(rows => {
+        setAthlets(rows as AthletEntity[])
+      })
+      .catch(e => {
+        toast({
+          variant: 'destructive',
+          title: 'Erreur de format',
+          description:
+            'Veuillez vérifier que le document est conforme au format attendu.',
+          duration: 5000,
+        })
+      })
+  }
 
-  // read.then(rows => {
-  //   setAthlets(rows as AthletEntity[])
-  // }).catch(e => {
-  //   toast({
-  //     variant: 'destructive',
-  //     title: 'Erreur de format',
-  //     description:
-  //     'Veuillez vérifier que le document est conforme au format attendu.',
-  //     duration: 5000,
-  //   })
-  // })
-  // }
-
-  // const isFileValid = (rows: any[][]): boolean => {
-  //   if (
-  //     rows[0][0] != 'CLUB' ||
-  //     rows[1][0] != 'LIGUE' ||
-  //     rows[2][0] != 'CONTACT' ||
-  //     rows[3][0] != 'COMPETITION'
-  //   ) {
-  //     return false
-  //   }
-  //   return true
-  // }
+  const isFileValid = (rows: any[][]): boolean => {
+    if (
+      rows[0][0] != 'CLUB' ||
+      rows[1][0] != 'LIGUE' ||
+      rows[2][0] != 'CONTACT' ||
+      rows[3][0] != 'COMPETITION'
+    ) {
+      return false
+    }
+    return true
+  }
 
   const sendList = () => {
     setIsOpen(false)
@@ -84,12 +85,83 @@ const DropZoneFileUpload = () => {
 
   return (
     <div>
-      {/* <DropFileUploader
+      <DropFileUploader
         accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         icon={<ScrollText />}
-        label="Charger le document engagement"
+        label='Charger le document engagement'
         onDrop={handleFileUpload}
-      /> */}
+      />
+
+      {athlets.length > 0 && (
+        <Suspense fallback={'Loading...'}>
+          <form className='mt-8' action={sendAsAthletList} ref={formRef}>
+            <h2 className='text-2xl '>Liste d'engagement </h2>
+            <Editable
+              header={[
+                'Nom',
+                'Prénoms',
+                'Date de naissance',
+                'Sexe',
+                'Catégorie',
+              ]}>
+              {athlets.map((a, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <Input
+                      type='text'
+                      defaultValue={a.firstname}
+                      name='firstname'
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Input
+                      type='text'
+                      defaultValue={a.lastname}
+                      name='firstname'
+                    />
+                  </TableCell>
+                  <TableCell>{a.birthdate}</TableCell>
+                  <TableCell>{a.sex}</TableCell>
+                  <TableCell>{a.weight}</TableCell>
+                </TableRow>
+              ))}
+            </Editable>
+
+            <div className='flex items-center justify-end mt-2'>
+              <Button type='button' onClick={() => setIsOpen(!isOpen)}>
+                Envoyer et valider
+              </Button>
+            </div>
+            <Dialog open={isOpen}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className='text-destructive'>
+                    Etes-vous sûr de vouloir continuer ?
+                  </DialogTitle>
+                  <DialogDescription>
+                    Cette action validera la liste d'engagement de la délégation
+                    de ce Club. Une fois envoyée, cette ne sera en aucun cas
+                    modifiable
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className='sm:justify-start mt-4 gap-1'>
+                  <DialogClose asChild>
+                    <Button type='button' variant='secondary'>
+                      Non, j'annulle
+                    </Button>
+                  </DialogClose>
+                  <Button
+                    type='button'
+                    variant='destructive'
+                    onClick={sendList}>
+                    Oui, je suis sûr
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </form>
+        </Suspense>
+      )}
     </div>
   )
 }

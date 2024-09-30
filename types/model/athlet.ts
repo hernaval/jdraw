@@ -7,5 +7,6 @@ export interface AthletEntity {
   weight: string
   photoUrl: string
   sex: string
-  club: ClubEntity
+  birthdate: string
+  club: Partial<ClubEntity>
 }

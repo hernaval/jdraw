@@ -8,18 +8,12 @@ import { mapObSelect } from '@/lib/utils'
 import { FilterSelect } from '@/types/FilterSelect'
 import { ClubEntity } from '@/types/model/Club'
 import { WeightCategoryEntity } from '@/types/model/WeightCategory'
-import React, { Suspense } from 'react'
+import React from 'react'
 
 const DelegationChecking = async () => {
   const clubs: ClubEntity[] = await getClub()
   const weights: WeightCategoryEntity[] = await getWeighCategory()
   const filters: FilterSelect[] = [
-    {
-      key: 'club',
-      label: 'Choisir un club',
-      data: mapObSelect(clubs, 'id', 'name', 'name', null),
-      groupable: false,
-    },
     {
       key: 'category',
       label: 'Choisir une catégorie',

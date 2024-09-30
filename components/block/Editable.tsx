@@ -1,6 +1,6 @@
-import { Table } from 'lucide-react'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import {
+  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -8,25 +8,21 @@ import {
   TableRow,
 } from '../ui/table'
 
-const Editable = () => {
+interface EditableProps {
+  header: string[]
+  children: ReactNode
+}
+const Editable: React.FC<EditableProps> = ({ header, children }) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className='w-[100px]'>Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className='text-right'>Amount</TableHead>
+          {header.map(value => (
+            <TableHead key={value}>{value}</TableHead>
+          ))}
         </TableRow>
       </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell className='font-medium'>INV001</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>Credit Card</TableCell>
-          <TableCell className='text-right'>$250.00</TableCell>
-        </TableRow>
-      </TableBody>
+      <TableBody>{children}</TableBody>
     </Table>
   )
 }

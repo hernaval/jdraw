@@ -36,3 +36,14 @@ model Athlet {
    club Club @relation(fields: [clubId], references: [id])
    clubId Int
 }
+
+model Competition { 
+  id Int @id @default(autoincrement())
+  name String
+  slug String 
+  location String 
+  startDate String 
+  endDate String 
+  registrationEndDate String 
+  bannerUrl String 
+}

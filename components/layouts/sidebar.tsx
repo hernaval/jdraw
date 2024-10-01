@@ -9,15 +9,6 @@ import Image from 'next/image'
 const Sidebar = () => {
   const pathname: string = usePathname()
 
-  const isActive = (to: string): boolean => {
-    for (const [pattern, title] of Object.entries(pathToTitleMap)) {
-      const regEx = new RegExp(pattern)
-      if (regEx.test(to) && regEx.test(pathname)) {
-        return true
-      }
-    }
-    return false
-  }
   return (
     <aside className='fixed inset-y-0 left-0 z-10 hidden w-28 flex flex-col items-center justify-between border-r bg-background sm:flex'>
       <div>

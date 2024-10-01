@@ -1,52 +1,54 @@
 import CompetitionCard from '@/components/block/competition-card'
+import { getCompetitions } from '@/feature/competition/get-competitions'
 import { CompetitionEntity } from '@/types/model/competition'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const competitionList: CompetitionEntity[] = [
-  {
-    id: 1,
-    name: 'Tournoi du capricore',
-    location: 'Antananarivo',
-    startDate: '10/10/2024',
-    endDate: '12/10/2024',
-    registrationEndDate: '25/09/2024',
-    slug: 'trn_capricorne',
-    bannerUrl: '',
-  },
-  {
-    id: 2,
-    name: 'Tournoi du capricore',
-    location: 'Antananarivo',
-    startDate: '10/10/2024',
-    endDate: '12/10/2024',
-    registrationEndDate: '25/09/2024',
-    slug: 'trn_capricorne',
-    bannerUrl: '',
-  },
-  {
-    id: 3,
-    name: 'Tournoi du capricore',
-    location: 'Antananarivo',
-    startDate: '10/10/2024',
-    endDate: '12/10/2024',
-    registrationEndDate: '25/09/2024',
-    slug: 'trn_capricorne',
-    bannerUrl: '',
-  },
-  {
-    id: 4,
-    name: 'Tournoi du capricore',
-    location: 'Antananarivo',
-    startDate: '10/10/2024',
-    endDate: '12/10/2024',
-    registrationEndDate: '25/09/2024',
-    slug: 'trn_capricorne',
-    bannerUrl: '',
-  },
-]
-const CompetitionPage = () => {
+// const competitionList: CompetitionEntity[] = [
+//   {
+//     id: 1,
+//     name: 'Tournoi du capricore',
+//     location: 'Antananarivo',
+//     startDate: '10/10/2024',
+//     endDate: '12/10/2024',
+//     registrationEndDate: '25/09/2024',
+//     slug: 'trn_capricorne',
+//     bannerUrl: '',
+//   },
+//   {
+//     id: 2,
+//     name: 'Tournoi du capricore',
+//     location: 'Antananarivo',
+//     startDate: '10/10/2024',
+//     endDate: '12/10/2024',
+//     registrationEndDate: '25/09/2024',
+//     slug: 'trn_capricorne',
+//     bannerUrl: '',
+//   },
+//   {
+//     id: 3,
+//     name: 'Tournoi du capricore',
+//     location: 'Antananarivo',
+//     startDate: '10/10/2024',
+//     endDate: '12/10/2024',
+//     registrationEndDate: '25/09/2024',
+//     slug: 'trn_capricorne',
+//     bannerUrl: '',
+//   },
+//   {
+//     id: 4,
+//     name: 'Tournoi du capricore',
+//     location: 'Antananarivo',
+//     startDate: '10/10/2024',
+//     endDate: '12/10/2024',
+//     registrationEndDate: '25/09/2024',
+//     slug: 'trn_capricorne',
+//     bannerUrl: '',
+//   },
+// ]
+const CompetitionPage = async () => {
+  const competitionList: CompetitionEntity[] = await getCompetitions()
   return (
     <div className='h-full grid items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-6'>
       <header className='sticky top-0 flex'>

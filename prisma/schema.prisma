@@ -33,6 +33,7 @@ model Athlet {
   photoUrl String
   birthdate String @default("01/01/1970")
   sex String 
+  competition String @default("")
    club Club @relation(fields: [clubId], references: [id])
    clubId Int
 }

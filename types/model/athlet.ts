@@ -9,4 +9,5 @@ export interface AthletEntity {
   sex: string
   birthdate: string
   club: Partial<ClubEntity>
+  competition?: string
 }

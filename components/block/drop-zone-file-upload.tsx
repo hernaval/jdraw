@@ -22,12 +22,14 @@ import {
 import { sendDelegationList } from '@/feature/delegation/send-delegation-list'
 import { formatDateAs } from '@/lib/date'
 import { useFormState } from 'react-dom'
+import { useParams } from 'next/navigation'
 
 const initialState = {
   code: 200,
   message: '',
 }
 const DropZoneFileUpload = () => {
+  const competition: any = useParams()
   const { toast } = useToast()
   const [isOpen, setIsOpen] = useState(false)
   const [athlets, setAthlets] = useState<AthletEntity[]>([])
@@ -51,6 +53,7 @@ const DropZoneFileUpload = () => {
             sex: rows[i][3].toString(),
             weight: rows[i][4].toString(),
             birthdate: rows[i][2].toString(),
+            competition: competition.name,
           })
         }
         resolve(sheetRows)

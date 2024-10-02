@@ -2,9 +2,11 @@ import { sum } from '@/lib/math'
 import { ParticipantSummary, Clubs } from '@/types/ParticipantSummary'
 import { getWeighCategory } from '../get-weigth-category'
 
-export async function getDelegationSummary(): Promise<ParticipantSummary> {
+export async function getDelegationSummary(
+  competition: string
+): Promise<ParticipantSummary> {
   const clubs = await prisma.club.findMany()
-  const athlets = await prisma.athlet.findMany()
+  const athlets = await prisma.athlet.findMany({ where: { competition } })
   const weights = await getWeighCategory()
 
   const clubSummary: Clubs[] = []

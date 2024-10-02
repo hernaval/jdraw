@@ -13,11 +13,11 @@ import { FilterSelect } from '@/types/FilterSelect'
 import { AthletEntity } from '@/types/model/athlet'
 import { ClubEntity } from '@/types/model/Club'
 import { WeightCategoryEntity } from '@/types/model/WeightCategory'
-import { ParticipantSummary } from '@/types/ParticipantSummary'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
 
-const DelegationList = async ({ searchParams }: any) => {
+const DelegationList = async ({ searchParams, params }: any) => {
+  const competition = params.name
   const clubs: ClubEntity[] = await getClub()
   const weights: WeightCategoryEntity[] = await getWeighCategory()
   const filters: FilterSelect[] = [
@@ -38,8 +38,9 @@ const DelegationList = async ({ searchParams }: any) => {
   const athlets: AthletEntity[] = await getDelegationList({
     club: searchParams.club,
     category: searchParams.category,
+    competition: competition,
   })
-  const summaries = await getDelegationSummary()
+  const summaries = await getDelegationSummary(competition)
 
   const buildSummaryHeader = (): string[] => {
     return weights.map(w => w.label)
@@ -49,7 +50,7 @@ const DelegationList = async ({ searchParams }: any) => {
       <Suspense fallback='Loading...'>
         <div className='flex justify-between'>
           <Filter title='Filtre' filters={filters} />
-          <Link href='/board/delegation/checking'>
+          <Link href={`/competition/${competition}/board/delegation/checking`}>
             <Button>Charger un document</Button>
           </Link>
         </div>

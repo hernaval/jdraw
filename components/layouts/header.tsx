@@ -12,8 +12,8 @@ import { PanelLeft, Link, Search, User, LogOut } from 'lucide-react'
 
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import { boardMenu } from '@/app/board/menu'
 import HeaderTitle from './header-title'
+import { boardMenu } from '@/app/competition/[name]/board/menu'
 
 const Header = () => {
   return (

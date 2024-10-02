@@ -11,32 +11,32 @@ import {
 export const boardMenu: SidebarItemProps[] = [
   {
     label: 'Accueil',
-    to: '/board',
+    to: '',
     icon: <Home className='h-8 w-8' />,
   },
   {
     label: 'Règlement',
-    to: '/board/outline',
+    to: 'board/outline',
     icon: <NotepadText className='h-8 w-8' />,
   },
   {
     label: 'Délégations',
-    to: '/board/delegation',
+    to: 'board/delegation',
     icon: <Users2 className='h-8 w-8' />,
   },
   {
     label: 'Tirages',
-    to: '/board/draw',
+    to: 'board/draw',
     icon: <GitBranch className='h-8 w-8' />,
   },
   {
     label: 'Tableaux',
-    to: '/board/match',
+    to: 'board/match',
     icon: <Keyboard className='h-8 w-8' />,
   },
   {
     label: 'Résultats',
-    to: '/board/results',
+    to: 'board/results',
     icon: <Trophy className='h-8 w-8' />,
   },
 ]

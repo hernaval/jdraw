@@ -1,6 +1,6 @@
 'use client'
 
-import { boardMenu, pathToTitleMap } from '@/app/board/menu'
+import { pathToTitleMap } from '@/app/competition/[name]/board/menu'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 

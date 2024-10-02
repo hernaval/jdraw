@@ -5,48 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-// const competitionList: CompetitionEntity[] = [
-//   {
-//     id: 1,
-//     name: 'Tournoi du capricore',
-//     location: 'Antananarivo',
-//     startDate: '10/10/2024',
-//     endDate: '12/10/2024',
-//     registrationEndDate: '25/09/2024',
-//     slug: 'trn_capricorne',
-//     bannerUrl: '',
-//   },
-//   {
-//     id: 2,
-//     name: 'Tournoi du capricore',
-//     location: 'Antananarivo',
-//     startDate: '10/10/2024',
-//     endDate: '12/10/2024',
-//     registrationEndDate: '25/09/2024',
-//     slug: 'trn_capricorne',
-//     bannerUrl: '',
-//   },
-//   {
-//     id: 3,
-//     name: 'Tournoi du capricore',
-//     location: 'Antananarivo',
-//     startDate: '10/10/2024',
-//     endDate: '12/10/2024',
-//     registrationEndDate: '25/09/2024',
-//     slug: 'trn_capricorne',
-//     bannerUrl: '',
-//   },
-//   {
-//     id: 4,
-//     name: 'Tournoi du capricore',
-//     location: 'Antananarivo',
-//     startDate: '10/10/2024',
-//     endDate: '12/10/2024',
-//     registrationEndDate: '25/09/2024',
-//     slug: 'trn_capricorne',
-//     bannerUrl: '',
-//   },
-// ]
 const CompetitionPage = async () => {
   const competitionList: CompetitionEntity[] = await getCompetitions()
   return (
@@ -59,7 +17,9 @@ const CompetitionPage = async () => {
         <h2 className='text-3xl'>Prochaines compétitions</h2>
         <div className='flex grid grid-cols-1  gap-8 lg:grid-cols-3 mt-8'>
           {competitionList.map(competition => (
-            <Link href={`/competiton/${competition.slug}`} key={competition.id}>
+            <Link
+              href={`/competition/${competition.slug}`}
+              key={competition.id}>
               <CompetitionCard competition={competition} />
             </Link>
           ))}

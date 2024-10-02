@@ -2,11 +2,12 @@
 import { HelpCircle } from 'lucide-react'
 import React from 'react'
 import SidebarItem from './sidebar-item'
-import { boardMenu, pathToTitleMap } from '@/app/board/menu'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
+import { boardMenu } from '@/app/competition/[name]/board/menu'
 
-const Sidebar = () => {
+const Sidebar = ({ params }: { params: { name: string } }) => {
+  const { name } = useParams()
   const pathname: string = usePathname()
 
   return (
@@ -20,11 +21,11 @@ const Sidebar = () => {
             <SidebarItem
               key={label}
               label={label}
-              to={to}
+              to={`/competition/${name}/${to}`}
               icon={icon}
               isActive={
-                (new RegExp('^/board/.+').test(to) && pathname.includes(to)) ||
-                to === pathname
+                (new RegExp('board/.+').test(to) && pathname.includes(to)) ||
+                (!new RegExp('board/.+').test(pathname) && to == '')
               }
             />
           ))}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Select,
   SelectContent,
@@ -15,11 +15,23 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card'
-import { Button } from '../ui/button'
-import { Plus } from 'lucide-react'
 import { Label } from '../ui/label'
+import MultiSelectBox from '../form/multi-select-box'
+import { SelectBoxData } from '@/types/SelectBoxData'
+import { Stage } from '@/types/model/Stage'
 
-const StageConfig = () => {
+interface StageConfigProps {
+  stage: Stage
+  rankedParticipants: SelectBoxData[]
+}
+
+const StageConfig: React.FC<StageConfigProps> = ({
+  stage,
+  rankedParticipants,
+}) => {
+  const [isFinal, setIsFinal] = useState<boolean>(false)
+
+  const selectParticipant = (id: number, checked: boolean) => {}
   return (
     <Card className='w-[350px]'>
       <CardHeader>
@@ -29,11 +41,22 @@ const StageConfig = () => {
       <CardContent>
         <form>
           <div className='grid w-full items-center gap-4'>
+            <div className='flex flex-row space-x-1.5'>
+              <input
+                disabled={stage.id == 0}
+                type='checkbox'
+                id={`finalTour${stage.id}`}
+                onChange={() => setIsFinal(!isFinal)}
+              />{' '}
+              <Label htmlFor={`finalTour${stage.id}`}>
+                Ce tour est issu de classements{' '}
+              </Label>
+            </div>
             <div className='flex flex-col space-y-1.5'>
               <Label htmlFor='drawFormat'>Format de tirage</Label>
               <Select>
                 <SelectTrigger id='drawFormat'>
-                  <SelectValue placeholder='Select' />
+                  <SelectValue placeholder='' />
                 </SelectTrigger>
                 <SelectContent position='popper'>
                   <SelectItem value='next'>Elimination</SelectItem>
@@ -45,6 +68,17 @@ const StageConfig = () => {
               <Label>Nombre de participants</Label>
               <Input id='name' placeholder='Ex: 8' />
             </div>
+
+            {isFinal && (
+              <div className='flex flex-col space-y-1.5'>
+                <MultiSelectBox
+                  data={rankedParticipants}
+                  title='Choisir les participants'
+                  label='Participants classés'
+                  onChecked={selectParticipant}
+                />
+              </div>
+            )}
           </div>
         </form>
       </CardContent>

@@ -11,7 +11,6 @@ import { WeightCategoryEntity } from '@/types/model/WeightCategory'
 import React from 'react'
 
 const DelegationChecking = async () => {
-  const clubs: ClubEntity[] = await getClub()
   const weights: WeightCategoryEntity[] = await getWeighCategory()
   const filters: FilterSelect[] = [
     {

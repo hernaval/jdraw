@@ -1,7 +1,7 @@
 'use client'
 
 import { Network, Table2, Bolt, Info, Plus, Settings } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import DrawFormatCard from './draw-format-card'
 import { DrawFormatEnum } from '@/types/model/draw-format'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
@@ -9,6 +9,11 @@ import { Separator } from '../ui/separator'
 import StageConfig from './stage-config'
 import { SelectBoxData } from '@/types/SelectBoxData'
 import { Stage } from '@/types/model/Stage'
+import { useToast } from '@/hooks/use-toast'
+import { FieldArray, Form, Formik } from 'formik'
+import { Button } from '../ui/button'
+import stageValidation from '../feature/stageValidation'
+import { ELIMINATION_PHASE } from '@/lib/constants'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -23,29 +28,104 @@ const rankedParticipants: SelectBoxData[] = [
   { id: 4, label: '4e', group: '1', value: '4e' },
 ]
 
-const initialStage: Stage = {
-  id: 0,
-  isFinal: false,
-  type: DrawFormatEnum.ELIMINATION,
+const initialStage: { [key: string]: Stage[] } = {
+  stages: [
+    {
+      isFinal: false,
+      format: 'elimination',
+      nbParticipants: 0,
+    },
+  ],
 }
 
 const DrawFormatSelector = () => {
+  const athletsCount = 18
+  const { toast } = useToast()
   const [drawFormat, setDrawFormat] = useState<DrawFormatEnum>(
     DrawFormatEnum.ELIMINATION
   )
-  const [stages, setStages] = useState<Stage[]>([initialStage])
-
   const handleCustomFormat = () => {
     setDrawFormat(DrawFormatEnum.CUSTOM)
   }
 
-  const addStage = () => {
-    const newStage: Stage = {
-      id: 1,
-      isFinal: false,
-      type: DrawFormatEnum.ELIMINATION,
+  const addStage = (push: any) => {
+    if (
+      drawFormat == DrawFormatEnum.ELIMINATION ||
+      drawFormat == DrawFormatEnum.ROUND_ROBIN
+    ) {
+      toast({
+        variant: 'default',
+        title: 'Action non supportée',
+        description:
+          "Ce format à tour unique ne permet pas l'ajout de nouveaux tours. Utilisez le format personnalisé",
+        duration: 3000,
+      })
+      return
     }
-    setStages([...stages, newStage])
+    const newStage: Stage = {
+      isFinal: false,
+      format: 'elimination',
+      nbParticipants: 0,
+    }
+
+    push(newStage)
+  }
+
+  const createStages = async (values: any) => {
+    const { stages } = values
+    console.log('form values stages ', stages)
+    if (drawFormat == DrawFormatEnum.CUSTOM) {
+      createStagesForCustom(stages)
+      return
+    }
+  }
+
+  const createStagesForCustom = (stages: Stage[]) => {
+    if (stageValidation.customFormatOnlyOneStage(stages)) {
+      toast({
+        title: 'Problème de configuration',
+        description: `
+        Ajouter au moins un 2e tour pour ce type personnalisé
+        `,
+        variant: 'destructive',
+      })
+      return
+    }
+
+    if (
+      stageValidation.someAthletNotPresentNonFinalStage(stages, athletsCount)
+    ) {
+      toast({
+        title: 'Participants non valides',
+        description: `
+        Vérifier si le nombre de participants alloués aux tours est différents du total des athlètes
+        `,
+        variant: 'destructive',
+      })
+      return
+    }
+
+    if (stageValidation.customFormatWithNoFinalStage(stages)) {
+      toast({
+        title: 'Absence de tour final',
+        description: `
+        Ajouter au moins un tour final pour ce type personnalisé
+        `,
+        variant: 'destructive',
+      })
+      return
+    }
+
+    if (stageValidation.someStagesAfterAFinalStageNotFinal(stages)) {
+      toast({
+        title: 'Problème de configuration',
+        description: `
+        Tous les tours après une 1ère phase finale doivent être des phases finales
+        `,
+        variant: 'destructive',
+      })
+      return
+    }
   }
 
   return (
@@ -84,25 +164,37 @@ const DrawFormatSelector = () => {
         </div>
         <Separator className='my-4' />
 
-        <div className='grid grid-cols-4 gap-4'>
-          {stages.map(s => (
-            <StageConfig
-              stage={s}
-              rankedParticipants={rankedParticipants}
-              key={s.id}
-            />
-          ))}
-          <div
-            className='border flex items-center justify-center cursor-pointer w-[350px] py-4'
-            onClick={addStage}>
-            <div className='flex flex-col items-center justify-center'>
-              <Plus size={70} color='gray' />
-              <p className='text-sm text-muted-foreground'>
-                Ajouter un nouveau tour
-              </p>
-            </div>
-          </div>
-        </div>
+        <Formik initialValues={initialStage} onSubmit={createStages}>
+          {({ values }) => (
+            <Form>
+              <FieldArray name='stages'>
+                {({ insert, push, remove }) => (
+                  <div className='grid grid-cols-4 gap-4'>
+                    {values.stages.length > 0 &&
+                      values.stages.map((stage, index) => (
+                        <StageConfig
+                          key={index}
+                          stage={{ ...stage, id: index }}
+                          rankedParticipants={rankedParticipants}
+                        />
+                      ))}
+                    <div
+                      className='border flex items-center justify-center cursor-pointer w-[350px] py-4'
+                      onClick={() => addStage(push)}>
+                      <div className='flex flex-col items-center justify-center'>
+                        <Plus size={70} color='gray' />
+                        <p className='text-sm text-muted-foreground'>
+                          Ajouter un nouveau tour
+                        </p>
+                      </div>
+                    </div>
+                    <Button type='submit'>Enregistrer</Button>
+                  </div>
+                )}
+              </FieldArray>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   )

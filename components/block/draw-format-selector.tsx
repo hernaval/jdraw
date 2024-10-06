@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast'
 import { FieldArray, Form, Formik } from 'formik'
 import { Button } from '../ui/button'
 import stageValidation from '../feature/stageValidation'
-import { ELIMINATION_PHASE } from '@/lib/constants'
+import { StageRankedGroup } from '@/types/model/StageRankedGroup'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -26,6 +26,26 @@ const rankedParticipants: SelectBoxData[] = [
   { id: 2, label: '2e', group: '1', value: '1er' },
   { id: 3, label: '3e', group: '1', value: '2e' },
   { id: 4, label: '4e', group: '1', value: '4e' },
+  { id: 5, label: '1er', group: '2', value: '1st' },
+  { id: 6, label: '2e', group: '2', value: '1er' },
+  { id: 7, label: '3e', group: '2', value: '2e' },
+]
+
+const selected: StageRankedGroup[] = [
+  {
+    stageId: 1,
+    rankingFromStage: [
+      { id: 0, selected: ['1st', '3rd'] },
+      { id: 1, selected: ['2nd'] },
+    ],
+  },
+  {
+    stageId: 2,
+    rankingFromStage: [
+      { id: 0, selected: ['1st', '3rd'] },
+      { id: 1, selected: ['2nd'] },
+    ],
+  },
 ]
 
 const initialStage: { [key: string]: Stage[] } = {
@@ -175,7 +195,6 @@ const DrawFormatSelector = () => {
                         <StageConfig
                           key={index}
                           stage={{ ...stage, id: index }}
-                          rankedParticipants={rankedParticipants}
                         />
                       ))}
                     <div

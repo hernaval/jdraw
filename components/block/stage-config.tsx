@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   Card,
   CardContent,
@@ -11,19 +11,38 @@ import MultiSelectBox from '../form/multi-select-box'
 import { SelectBoxData } from '@/types/SelectBoxData'
 import { Stage } from '@/types/model/Stage'
 import { Field } from 'formik'
+import { group } from 'console'
 
+const rankedParticipants: SelectBoxData[] = [
+  { id: 1, label: '1er', group: '1', value: '1st' },
+  { id: 2, label: '2e', group: '1', value: '1er' },
+  { id: 3, label: '3e', group: '1', value: '2e' },
+  { id: 4, label: '4e', group: '1', value: '4e' },
+]
 interface StageConfigProps {
   stage: Stage
-  rankedParticipants: SelectBoxData[]
 }
 
-const StageConfig: React.FC<StageConfigProps> = ({
-  stage,
-  rankedParticipants,
-}) => {
-  // const [isFinal, setIsFinal] = useState<boolean>(false)
-
+const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
   const selectParticipant = (id: number, checked: boolean) => {}
+
+  const buildRankedParticipants = (): SelectBoxData[] => {
+    const lastStage = Number(stage.id)
+    const data: SelectBoxData[] = []
+    for (let i = 0; i < lastStage; i++) {
+      data.push(
+        ...Array.from({ length: 4 }, (_, index) => ({
+          id: index + 4 * i,
+          label: `#${index + 1}`,
+          group: `Tour-${i}`,
+          value: `${index + 1}th`,
+        }))
+      )
+    }
+
+    console.log('data', data)
+    return data
+  }
   return (
     <Card className='w-[350px]'>
       <CardHeader>
@@ -67,7 +86,7 @@ const StageConfig: React.FC<StageConfigProps> = ({
           {stage.isFinal && (
             <div className='flex flex-col space-y-1.5'>
               <MultiSelectBox
-                data={rankedParticipants}
+                data={buildRankedParticipants()}
                 title='Choisir les participants'
                 label='Participants classés'
                 onChecked={selectParticipant}

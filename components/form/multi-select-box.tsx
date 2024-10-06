@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -9,6 +9,7 @@ import {
 } from '../ui/dropdown-menu'
 import { Button } from '../ui/button'
 import { SelectBoxData } from '@/types/SelectBoxData'
+import { Separator } from '@radix-ui/react-dropdown-menu'
 
 interface MultiSelectBoxProps {
   title: string
@@ -22,6 +23,18 @@ const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
   data,
   onChecked,
 }) => {
+  const [checkList, setCheckList] = useState<Set<number>>(new Set())
+  const handleCheck = (data: SelectBoxData, checked: boolean) => {
+    const list = new Set(checkList)
+    if (list.has(data.id)) {
+      list.delete(data.id)
+    } else {
+      list.add(data.id)
+    }
+    setCheckList(list)
+    onChecked(data.id, checked)
+  }
+
   return (
     <div>
       <DropdownMenu>
@@ -30,12 +43,13 @@ const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-56'>
           <DropdownMenuLabel>{label}</DropdownMenuLabel>
-
-          {data.map(({ id, label, group }) => (
+          <Separator />
+          {data.map(d => (
             <DropdownMenuCheckboxItem
-              key={id}
-              onCheckedChange={value => onChecked(id, value)}>
-              {group} {label}
+              key={d.id}
+              onCheckedChange={value => handleCheck(d, value)}
+              checked={checkList.has(d.id)}>
+              {d.group} {d.label} {JSON.stringify(checkList)}
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>

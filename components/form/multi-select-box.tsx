@@ -10,12 +10,13 @@ import {
 import { Button } from '../ui/button'
 import { SelectBoxData } from '@/types/SelectBoxData'
 import { Separator } from '@radix-ui/react-dropdown-menu'
+import { useStageStore } from '@/lib/store/stage-ranked-store'
 
 interface MultiSelectBoxProps {
   title: string
   label: string
   data: SelectBoxData[]
-  onChecked: (id: number, value: boolean) => void
+  onChecked: (data: SelectBoxData) => void
 }
 const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
   label,
@@ -24,6 +25,8 @@ const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
   onChecked,
 }) => {
   const [checkList, setCheckList] = useState<Set<number>>(new Set())
+
+  // TODO use a global state to manage it
   const handleCheck = (data: SelectBoxData, checked: boolean) => {
     const list = new Set(checkList)
     if (list.has(data.id)) {
@@ -32,7 +35,7 @@ const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
       list.add(data.id)
     }
     setCheckList(list)
-    onChecked(data.id, checked)
+    onChecked(data)
   }
 
   return (
@@ -48,8 +51,9 @@ const MultiSelectBox: React.FC<MultiSelectBoxProps> = ({
             <DropdownMenuCheckboxItem
               key={d.id}
               onCheckedChange={value => handleCheck(d, value)}
-              checked={checkList.has(d.id)}>
-              {d.group} {d.label} {JSON.stringify(checkList)}
+              checked={checkList.has(d.id)}
+              disabled={d.disabled}>
+              {d.group} {d.label}
             </DropdownMenuCheckboxItem>
           ))}
         </DropdownMenuContent>

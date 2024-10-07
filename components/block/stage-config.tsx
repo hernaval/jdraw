@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React from 'react'
 import {
   Card,
   CardContent,
@@ -11,7 +11,7 @@ import MultiSelectBox from '../form/multi-select-box'
 import { SelectBoxData } from '@/types/SelectBoxData'
 import { Stage } from '@/types/model/Stage'
 import { Field } from 'formik'
-import { group } from 'console'
+import { useStageStore } from '@/lib/store/stage-ranked-store'
 
 const rankedParticipants: SelectBoxData[] = [
   { id: 1, label: '1er', group: '1', value: '1st' },
@@ -24,23 +24,33 @@ interface StageConfigProps {
 }
 
 const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
-  const selectParticipant = (id: number, checked: boolean) => {}
+  const { add, selected, has, belongsTo } = useStageStore()
+  const selectParticipant = (data: SelectBoxData) => {
+    add(stage.id!, Number(data.group), data)
+
+    console.log('results', selected)
+  }
 
   const buildRankedParticipants = (): SelectBoxData[] => {
     const lastStage = Number(stage.id)
     const data: SelectBoxData[] = []
     for (let i = 0; i < lastStage; i++) {
       data.push(
-        ...Array.from({ length: 4 }, (_, index) => ({
-          id: index + 4 * i,
-          label: `#${index + 1}`,
-          group: `Tour-${i}`,
-          value: `${index + 1}th`,
-        }))
+        ...Array.from({ length: 4 }, (_, index) => {
+          const selectData: SelectBoxData = {
+            id: index + 4 * i,
+            label: `#${index + 1}`,
+            group: `${i}`,
+            value: `${index + 1}`,
+          }
+          if (has(selectData) && !belongsTo(stage.id!, selectData)) {
+            selectData.disabled = true
+          }
+          return selectData
+        })
       )
     }
-
-    console.log('data', data)
+    console.log(data)
     return data
   }
   return (
@@ -50,6 +60,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
         <CardDescription>Deploy your new project in one-click.</CardDescription>
       </CardHeader>
       <CardContent>
+        {JSON.stringify(selected)}
         <div className='grid w-full items-center gap-4'>
           <div className='flex flex-row space-x-1.5'>
             <Field

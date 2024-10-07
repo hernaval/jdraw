@@ -3,7 +3,7 @@ export interface StageRankedGroup {
   rankingFromStage: StageFrom[]
 }
 
-interface StageFrom {
+export interface StageFrom {
   id: number
   selected: Array<string>
 }

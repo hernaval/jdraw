@@ -75,6 +75,7 @@ export const useStageStore = create<StageRankedState>()((set, get) => ({
     return false
   },
   belongsTo: (stageId, data) => {
+    console.log('to check', stageId, data.group, data.value)
     const { selected } = get()
 
     const rankingFromStage: StageRankedGroup[] = selected
@@ -86,10 +87,7 @@ export const useStageStore = create<StageRankedState>()((set, get) => ({
       }))
       .filter(s => s.rankingFromStage.length > 0)
 
-    console.log(
-      'here is my belongs',
-      rankingFromStage.find(r => r.stageId == stageId)
-    )
+    console.log('here is my belongs', rankingFromStage)
     return rankingFromStage.find(r => r.stageId == stageId) != undefined
   },
 }))

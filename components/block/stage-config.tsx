@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import { SelectBoxData } from '@/types/SelectBoxData'
 import { Stage } from '@/types/model/Stage'
 import { Field } from 'formik'
 import { useStageStore } from '@/lib/store/stage-ranked-store'
+import { toast } from '@/hooks/use-toast'
 
 const rankedParticipants: SelectBoxData[] = [
   { id: 1, label: '1er', group: '1', value: '1st' },
@@ -26,13 +27,20 @@ interface StageConfigProps {
 const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
   const { add, selected, has, belongsTo } = useStageStore()
   const selectParticipant = (data: SelectBoxData) => {
+    if (has(data) && !belongsTo(stage.id!, data)) {
+      toast({
+        title: 'Mauvais placement',
+        description: 'Cet athlète est déjà assigné à un autre tour',
+      })
+      return
+    }
     add(stage.id!, Number(data.group), data)
 
     console.log('results', selected)
   }
 
-  const buildRankedParticipants = (): SelectBoxData[] => {
-    const lastStage = Number(stage.id)
+  const buildRankedParticipants = (currStage: Stage): SelectBoxData[] => {
+    const lastStage = Number(currStage.id)
     const data: SelectBoxData[] = []
     for (let i = 0; i < lastStage; i++) {
       data.push(
@@ -43,9 +51,6 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
             group: `${i}`,
             value: `${index + 1}`,
           }
-          if (has(selectData) && !belongsTo(stage.id!, selectData)) {
-            selectData.disabled = true
-          }
           return selectData
         })
       )
@@ -53,6 +58,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
     console.log(data)
     return data
   }
+
   return (
     <Card className='w-[350px]'>
       <CardHeader>
@@ -97,7 +103,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
           {stage.isFinal && (
             <div className='flex flex-col space-y-1.5'>
               <MultiSelectBox
-                data={buildRankedParticipants()}
+                data={buildRankedParticipants(stage)}
                 title='Choisir les participants'
                 label='Participants classés'
                 onChecked={selectParticipant}

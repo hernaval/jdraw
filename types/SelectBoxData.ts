@@ -3,4 +3,5 @@ export interface SelectBoxData {
   label: string
   value: any
   group?: string
+  disabled?: boolean
 }

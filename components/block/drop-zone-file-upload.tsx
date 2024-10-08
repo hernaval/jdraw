@@ -23,7 +23,6 @@ import { sendDelegationList } from '@/feature/delegation/send-delegation-list'
 import { formatDateAs } from '@/lib/date'
 import { useFormState } from 'react-dom'
 import { useParams } from 'next/navigation'
-import ui from '@/lib/ui'
 
 const initialState = {
   code: 200,

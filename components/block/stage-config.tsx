@@ -14,12 +14,6 @@ import { Field } from 'formik'
 import { useStageStore } from '@/lib/store/stage-ranked-store'
 import { toast } from '@/hooks/use-toast'
 
-const rankedParticipants: SelectBoxData[] = [
-  { id: 1, label: '1er', group: '1', value: '1st' },
-  { id: 2, label: '2e', group: '1', value: '1er' },
-  { id: 3, label: '3e', group: '1', value: '2e' },
-  { id: 4, label: '4e', group: '1', value: '4e' },
-]
 interface StageConfigProps {
   stage: Stage
 }

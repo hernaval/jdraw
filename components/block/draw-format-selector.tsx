@@ -1,19 +1,18 @@
 'use client'
 
 import { Network, Table2, Bolt, Info, Plus, Settings } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import DrawFormatCard from './draw-format-card'
 import { DrawFormatEnum } from '@/types/model/draw-format'
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Separator } from '../ui/separator'
 import StageConfig from './stage-config'
-import { SelectBoxData } from '@/types/SelectBoxData'
 import { Stage } from '@/types/model/Stage'
 import { useToast } from '@/hooks/use-toast'
 import { FieldArray, Form, Formik } from 'formik'
 import { Button } from '../ui/button'
 import stageValidation from '../feature/stageValidation'
-import { StageRankedGroup } from '@/types/model/StageRankedGroup'
+import { useStageStore } from '@/lib/store/stage-ranked-store'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -21,32 +20,32 @@ const formatGuide = {
   2: 'Custom',
 }
 
-const rankedParticipants: SelectBoxData[] = [
-  { id: 1, label: '1er', group: '1', value: '1st' },
-  { id: 2, label: '2e', group: '1', value: '1er' },
-  { id: 3, label: '3e', group: '1', value: '2e' },
-  { id: 4, label: '4e', group: '1', value: '4e' },
-  { id: 5, label: '1er', group: '2', value: '1st' },
-  { id: 6, label: '2e', group: '2', value: '1er' },
-  { id: 7, label: '3e', group: '2', value: '2e' },
-]
+// const rankedParticipants: SelectBoxData[] = [
+//   { id: 1, label: '1er', group: '1', value: '1st' },
+//   { id: 2, label: '2e', group: '1', value: '1er' },
+//   { id: 3, label: '3e', group: '1', value: '2e' },
+//   { id: 4, label: '4e', group: '1', value: '4e' },
+//   { id: 5, label: '1er', group: '2', value: '1st' },
+//   { id: 6, label: '2e', group: '2', value: '1er' },
+//   { id: 7, label: '3e', group: '2', value: '2e' },
+// ]
 
-const selected: StageRankedGroup[] = [
-  {
-    stageId: 1,
-    rankingFromStage: [
-      { id: 0, selected: ['1st', '3rd'] },
-      { id: 1, selected: ['2nd'] },
-    ],
-  },
-  {
-    stageId: 2,
-    rankingFromStage: [
-      { id: 0, selected: ['1st', '3rd'] },
-      { id: 1, selected: ['2nd'] },
-    ],
-  },
-]
+// const selected: StageRankedGroup[] = [
+//   {
+//     stageId: 1,
+//     rankingFromStage: [
+//       { id: 0, selected: ['1st', '3rd'] },
+//       { id: 1, selected: ['2nd'] },
+//     ],
+//   },
+//   {
+//     stageId: 2,
+//     rankingFromStage: [
+//       { id: 0, selected: ['1st', '3rd'] },
+//       { id: 1, selected: ['2nd'] },
+//     ],
+//   },
+// ]
 
 const initialStage: { [key: string]: Stage[] } = {
   stages: [
@@ -58,9 +57,15 @@ const initialStage: { [key: string]: Stage[] } = {
   ],
 }
 
-const DrawFormatSelector = () => {
-  const athletsCount = 18
+interface DrawFormatSelectorProps {
+  athletsCount: number
+}
+const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
+  athletsCount,
+}) => {
+  const drawRef = useRef(null)
   const { toast } = useToast()
+  const { selected } = useStageStore()
   const [drawFormat, setDrawFormat] = useState<DrawFormatEnum>(
     DrawFormatEnum.ELIMINATION
   )
@@ -92,12 +97,20 @@ const DrawFormatSelector = () => {
   }
 
   const createStages = async (values: any) => {
-    const { stages } = values
-    console.log('form values stages ', stages)
+    const stages: Stage[] = values.stages
     if (drawFormat == DrawFormatEnum.CUSTOM) {
       createStagesForCustom(stages)
-      return
     }
+    stages.forEach((s, index) => {
+      if (s.isFinal) {
+        const ranking = selected.find(ranking => ranking.stageId == index)
+        if (ranking) {
+          s.rankedParticipants = ranking
+        }
+      }
+    })
+
+    console.log('from values after ranked', stages)
   }
 
   const createStagesForCustom = (stages: Stage[]) => {
@@ -178,13 +191,26 @@ const DrawFormatSelector = () => {
       </div>
 
       <div>
-        <div className='flex gap-1  mt-16 items-center'>
-          <h4 className='text-xl'>Configuration </h4>
-          <Settings size={24} />
+        <div className='flex  justify-between mt-16 '>
+          <div className='flex gap-1  items-center'>
+            <h4 className='text-xl'>Configuration </h4>
+            <Settings size={24} />
+          </div>
+          <Button
+            type='button'
+            onClick={() => {
+              const ref: any = drawRef.current
+              if (ref) ref.submitForm()
+            }}>
+            Enregistrer
+          </Button>
         </div>
         <Separator className='my-4' />
 
-        <Formik initialValues={initialStage} onSubmit={createStages}>
+        <Formik
+          initialValues={initialStage}
+          onSubmit={createStages}
+          innerRef={drawRef}>
           {({ values }) => (
             <Form>
               <FieldArray name='stages'>
@@ -207,7 +233,6 @@ const DrawFormatSelector = () => {
                         </p>
                       </div>
                     </div>
-                    <Button type='submit'>Enregistrer</Button>
                   </div>
                 )}
               </FieldArray>

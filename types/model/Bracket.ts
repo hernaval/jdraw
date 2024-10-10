@@ -1,5 +1,6 @@
 import { MatchEntity } from './Match'
 
-export interface Bracket {
+export interface BracketEntity {
+  round: number
   matches: MatchEntity[]
 }

@@ -5,10 +5,10 @@ export interface MatchEntity {
   position: number
   round?: number
   whiteAthlet?: Partial<AthletEntity>
-  blueAthlet?: Partial<AthletEntity>
+  blueAthlet: Partial<AthletEntity> | null
   whitePlaceholder?: string
   bluePlaceholder?: string
   nextMatchId?: number
-  winnerAthlet: AthletEntity | null
+  winnerAthlet: Partial<AthletEntity> | null
   orderNo?: number
 }

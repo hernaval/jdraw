@@ -8,7 +8,6 @@ import { AthletEntity } from '@/types/model/athlet'
 
 interface MatchCardProps {
   match: MatchEntity
-  extraMargin?: string
 }
 
 interface AthletRowProps {
@@ -24,7 +23,7 @@ const AthletRow: React.FC<AthletRowProps> = ({
   return (
     <div
       className={cn(
-        blueJudogi ? ' border-blue-900' : '',
+        blueJudogi ? 'border-l-2 border-blue-900' : '',
         'flex items-center justify-between'
       )}>
       <div className='flex items-center pl-1'>
@@ -37,13 +36,13 @@ const AthletRow: React.FC<AthletRowProps> = ({
   )
 }
 
-const MatchCard: React.FC<MatchCardProps> = ({ match, extraMargin }) => {
+const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
   return (
-    <Card className={cn('w-52 bg-white shadow-sm py-2', extraMargin)}>
-      <div className=''>
+    <Card className={cn('w-52 h-16 bg-white shadow-sm py-2')}>
+      <div className='flex flex-col '>
         <AthletRow athlet={match.whiteAthlet} />
-        <Separator className='my-2' />
-        <AthletRow blueJudogi athlet={match.blueAthlet} />
+        <Separator className='my-1' />
+        {match.blueAthlet && <AthletRow blueJudogi athlet={match.blueAthlet} />}
       </div>
     </Card>
   )

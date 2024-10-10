@@ -17,7 +17,7 @@ const rounds: BracketEntity[] = [
         id: 2,
         position: 2,
         whiteAthlet: { firstname: 'Herinavalona', lastname: 'Ranarivola' },
-        blueAthlet: { firstname: 'John', lastname: 'Doe' },
+        blueAthlet: null,
         winnerAthlet: null,
       },
       {
@@ -97,19 +97,37 @@ const rounds: BracketEntity[] = [
       },
     ],
   },
-  // {
-  //     round: 3,
-  //     matches: [
-  //         {id: 1, position:13, whiteAthlet: {firstname: "Herinavalona", lastname: "Ranarivola"}, blueAthlet: {firstname: "John", lastname: "Doe"}, winnerAthlet: null},
-  //         {id: 2, position:14, whiteAthlet: {firstname: "Herinavalona", lastname: "Ranarivola"}, blueAthlet: {firstname: "John", lastname: "Doe"}, winnerAthlet: null},
-  //     ]
-  // },
-  // {
-  //     round: 4,
-  //     matches: [
-  //         {id: 1, position:15, whiteAthlet: {firstname: "Herinavalona", lastname: "Ranarivola"}, blueAthlet: {firstname: "John", lastname: "Doe"}, winnerAthlet: null},
-  //     ]
-  // }
+  {
+    round: 3,
+    matches: [
+      {
+        id: 1,
+        position: 13,
+        whiteAthlet: { firstname: 'Herinavalona', lastname: 'Ranarivola' },
+        blueAthlet: { firstname: 'John', lastname: 'Doe' },
+        winnerAthlet: null,
+      },
+      {
+        id: 2,
+        position: 14,
+        whiteAthlet: { firstname: 'Herinavalona', lastname: 'Ranarivola' },
+        blueAthlet: { firstname: 'John', lastname: 'Doe' },
+        winnerAthlet: null,
+      },
+    ],
+  },
+  {
+    round: 4,
+    matches: [
+      {
+        id: 1,
+        position: 15,
+        whiteAthlet: { firstname: 'Herinavalona', lastname: 'Ranarivola' },
+        blueAthlet: { firstname: 'John', lastname: 'Doe' },
+        winnerAthlet: null,
+      },
+    ],
+  },
 ]
 
 const BracketGenerationPage = ({ searchParams, params }: any) => {

@@ -8,36 +8,45 @@ interface BracketTreeProps {
 
 const BracketTree: React.FC<BracketTreeProps> = ({ rounds }) => {
   const totalRounds = rounds.length
-  const bracketHeight = Math.pow(2, totalRounds) * 80
+  const maxMatches = Math.pow(2, totalRounds - 1)
+
+  const getRowSpan = (roundIndex: number) => {
+    return Math.pow(2, roundIndex)
+  }
+
+  const getStartRow = (matchIndex: number, roundIndex: number) => {
+    const spacing = Math.pow(2, roundIndex)
+    return matchIndex * spacing + 1
+  }
   return (
-    <div className='h-full'>
-      <div className='relative' style={{ height: `${bracketHeight}px` }}>
+    <div className='h-full overflow-auto '>
+      <div
+        className='grid'
+        style={{
+          gridTemplateColumns: `repeat(${totalRounds}, minmax(160px, 250px))`,
+          gridTemplateRows: `repeat(${maxMatches}, minmax(80px, auto))`,
+        }}>
         {rounds.map((round, roundIndex) => (
-          <div
-            key={roundIndex}
-            className='absolute top-0 bottom-0 w-48'
-            style={{
-              left: `${roundIndex * 250}px`,
-            }}>
+          <React.Fragment key={round.round}>
             {round.matches.map((match, matchIndex) => {
-              const matchHeight = bracketHeight / round.matches.length
-              const yPos = matchHeight * matchIndex + matchHeight / 2
+              const rowSpan = getRowSpan(roundIndex)
+              const startRow = getStartRow(matchIndex, roundIndex)
 
               return (
                 <div
-                  key={match.id}
-                  className='absolute'
+                  key={match.position}
+                  className='relative'
                   style={{
-                    top: `${yPos - 20}px`,
+                    gridColumn: roundIndex + 1,
+                    gridRow: `${startRow} / span ${rowSpan}`,
                   }}>
-                  <MatchCard
-                    match={match}
-                    extraMargin={roundIndex > 0 ? '' : ''}
-                  />
+                  <div className='absolute inset-0 flex items-center justify-center'>
+                    <MatchCard match={match} />
+                  </div>
                 </div>
               )
             })}
-          </div>
+          </React.Fragment>
         ))}
       </div>
     </div>

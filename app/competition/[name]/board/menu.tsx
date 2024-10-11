@@ -42,10 +42,10 @@ export const boardMenu: SidebarItemProps[] = [
 ]
 
 export const pathToTitleMap: { [key: string]: string } = {
-  '^/board': 'Général',
-  '^/board/outline': 'Règlements',
-  '^/board/delegation': 'Délégations',
-  '^/board/draw': 'Tirage au sort',
-  '^/board/match': 'Tableaux',
-  '^/board/results': 'Résultats',
+  '/competition/[^/]+$': 'Général',
+  '/board/outline': 'Règlements',
+  '/board/delegation': 'Délégations',
+  '/board/draw': 'Tirage au sort',
+  '/board/match': 'Tableaux',
+  '/board/results': 'Résultats',
 }

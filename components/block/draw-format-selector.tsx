@@ -20,6 +20,7 @@ import {
 } from '@/lib/constants'
 import { produce } from 'immer'
 import AthletCard from './athlet-card'
+import { saveDrawConfig } from '@/feature/draw/save-draw-config'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -27,48 +28,15 @@ const formatGuide = {
   2: 'Custom',
 }
 
-// const rankedParticipants: SelectBoxData[] = [
-//   { id: 1, label: '1er', group: '1', value: '1st' },
-//   { id: 2, label: '2e', group: '1', value: '1er' },
-//   { id: 3, label: '3e', group: '1', value: '2e' },
-//   { id: 4, label: '4e', group: '1', value: '4e' },
-//   { id: 5, label: '1er', group: '2', value: '1st' },
-//   { id: 6, label: '2e', group: '2', value: '1er' },
-//   { id: 7, label: '3e', group: '2', value: '2e' },
-// ]
-
-// const selected: StageRankedGroup[] = [
-//   {
-//     stageId: 1,
-//     rankingFromStage: [
-//       { id: 0, selected: ['1st', '3rd'] },
-//       { id: 1, selected: ['2nd'] },
-//     ],
-//   },
-//   {
-//     stageId: 2,
-//     rankingFromStage: [
-//       { id: 0, selected: ['1st', '3rd'] },
-//       { id: 1, selected: ['2nd'] },
-//     ],
-//   },
-// ]
-
-const initialStage: { [key: string]: Stage[] } = {
-  stages: [
-    {
-      isFinal: false,
-      format: ELIMINATION_PHASE,
-      nbParticipants: 0,
-    },
-  ],
-}
-
 interface DrawFormatSelectorProps {
   athletsCount: number
+  competition: string
+  category: string
 }
 const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   athletsCount,
+  competition,
+  category,
 }) => {
   const drawRef = useRef(null)
   const { toast } = useToast()
@@ -144,7 +112,15 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
       }
     })
 
-    console.log('from values after ranked', stages)
+    console.log('from values after ranked', competition, category, stages)
+    await saveDrawConfig(competition, category, stages).then(response => {
+      toast({
+        title: 'Configuration réussie',
+        description:
+          'La configuration du tirage pour cette catégorie est enregistrée avec succès.',
+        duration: 2000,
+      })
+    })
   }
 
   const validateCustomStage = (stages: Stage[]) => {

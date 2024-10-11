@@ -28,12 +28,6 @@ const DrawList = async ({ searchParams, params }: any) => {
     competition: competition,
   })
 
-  const weightStrToId = (): string => {
-    return (
-      weights.find(w => w.label == searchParams.category)?.id.toString() || ''
-    )
-  }
-
   const countClub = new Set(athlets.map(a => a.club.id)).size
   return (
     <div>
@@ -41,7 +35,7 @@ const DrawList = async ({ searchParams, params }: any) => {
         <div className='flex justify-between'>
           <Filter title='Filtre' filters={filters} />
           <Link
-            href={`/competition/${competition}/board/draw/${weightStrToId()}/format`}>
+            href={`/competition/${competition}/board/draw/${searchParams.category}/format`}>
             <Button
               disabled={searchParams.category == undefined}
               className='gap-2'>

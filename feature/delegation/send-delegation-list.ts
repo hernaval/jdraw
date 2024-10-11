@@ -1,7 +1,6 @@
 'use server'
 
 import { AthletEntity } from '@/types/model/athlet'
-import { Athlet } from '@prisma/client'
 
 export async function sendDelegationList(
   athlets: AthletEntity[],

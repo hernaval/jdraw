@@ -48,3 +48,16 @@ model Competition {
   registrationEndDate String 
   bannerUrl String 
 }
+
+model StageConfig {
+   id                Int             @id @default(autoincrement())
+  configData        Json             
+
+  competition       String 
+  weightCategory    String 
+
+  generated         Boolean @default(false)
+
+  // ensure each competition and weight category pair is unique
+  @@unique([competition, weightCategory])
+}

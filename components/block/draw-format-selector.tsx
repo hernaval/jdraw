@@ -1,6 +1,15 @@
 'use client'
 
-import { Network, Table2, Bolt, Info, Plus, Settings } from 'lucide-react'
+import {
+  Network,
+  Table2,
+  Bolt,
+  Info,
+  Plus,
+  Settings,
+  Save,
+  StepForward,
+} from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import DrawFormatCard from './draw-format-card'
 import { DrawFormatEnum } from '@/types/model/draw-format'
@@ -19,7 +28,9 @@ import {
   ROUND_ROBIN_PHASE,
 } from '@/lib/constants'
 import { produce } from 'immer'
-import AthletCard from './athlet-card'
+import { saveDrawConfig } from '@/feature/draw/save-draw-config'
+import ActionButton from '../action/action-button'
+import LinkButton from '../action/link-button'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -27,48 +38,17 @@ const formatGuide = {
   2: 'Custom',
 }
 
-// const rankedParticipants: SelectBoxData[] = [
-//   { id: 1, label: '1er', group: '1', value: '1st' },
-//   { id: 2, label: '2e', group: '1', value: '1er' },
-//   { id: 3, label: '3e', group: '1', value: '2e' },
-//   { id: 4, label: '4e', group: '1', value: '4e' },
-//   { id: 5, label: '1er', group: '2', value: '1st' },
-//   { id: 6, label: '2e', group: '2', value: '1er' },
-//   { id: 7, label: '3e', group: '2', value: '2e' },
-// ]
-
-// const selected: StageRankedGroup[] = [
-//   {
-//     stageId: 1,
-//     rankingFromStage: [
-//       { id: 0, selected: ['1st', '3rd'] },
-//       { id: 1, selected: ['2nd'] },
-//     ],
-//   },
-//   {
-//     stageId: 2,
-//     rankingFromStage: [
-//       { id: 0, selected: ['1st', '3rd'] },
-//       { id: 1, selected: ['2nd'] },
-//     ],
-//   },
-// ]
-
-const initialStage: { [key: string]: Stage[] } = {
-  stages: [
-    {
-      isFinal: false,
-      format: ELIMINATION_PHASE,
-      nbParticipants: 0,
-    },
-  ],
-}
-
 interface DrawFormatSelectorProps {
   athletsCount: number
+  competition: string
+  category: string
+  configDone: boolean
 }
 const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   athletsCount,
+  competition,
+  category,
+  configDone,
 }) => {
   const drawRef = useRef(null)
   const { toast } = useToast()
@@ -76,6 +56,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   const [drawFormat, setDrawFormat] = useState<DrawFormatEnum>(
     DrawFormatEnum.ELIMINATION
   )
+  const [configFinished, setconfigFinished] = useState(configDone)
   const [initialFormValueStage, setInitialFormValueStage] = useState({
     stages: [
       {
@@ -144,7 +125,16 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
       }
     })
 
-    console.log('from values after ranked', stages)
+    console.log('from values after ranked', competition, category, stages)
+    await saveDrawConfig(competition, category, stages).then(response => {
+      setconfigFinished(true)
+      toast({
+        title: 'Configuration réussie',
+        description:
+          'La configuration du tirage pour cette catégorie est enregistrée avec succès.',
+        duration: 2000,
+      })
+    })
   }
 
   const validateCustomStage = (stages: Stage[]) => {
@@ -230,14 +220,23 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
             <h4 className='text-xl'>Configuration </h4>
             <Settings size={24} />
           </div>
-          <Button
-            type='button'
-            onClick={() => {
-              const ref: any = drawRef.current
-              if (ref) ref.submitForm()
-            }}>
-            Enregistrer
-          </Button>
+          {configFinished && (
+            <LinkButton
+              label='Passer au tirage'
+              icon={<StepForward />}
+              href={`/competition/${competition}/board/draw/${category}/bracket`}
+            />
+          )}
+          {!configFinished && (
+            <ActionButton
+              label='Enregister'
+              icon={<Save />}
+              onClick={() => {
+                const ref: any = drawRef.current
+                if (ref) ref.submitForm()
+              }}
+            />
+          )}
         </div>
         <Separator className='my-4' />
 

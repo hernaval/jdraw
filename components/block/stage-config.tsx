@@ -16,9 +16,10 @@ import { toast } from '@/hooks/use-toast'
 
 interface StageConfigProps {
   stage: Stage
+  disabled: boolean
 }
 
-const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
+const StageConfig: React.FC<StageConfigProps> = ({ stage, disabled }) => {
   const { add, selected, has, belongsTo } = useStageStore()
   const selectParticipant = (data: SelectBoxData) => {
     if (has(data) && !belongsTo(stage.id!, data)) {
@@ -67,6 +68,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
               type='checkbox'
               id={`finalTour${stage.id}`}
               name={`stages.${stage.id}.isFinal`}
+              disabled={disabled}
             />
             <Label htmlFor={`finalTour${stage.id}`}>
               Ce tour est issu de classements{' '}
@@ -77,6 +79,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
             <Field
               as='select'
               name={`stages.${stage.id}.format`}
+              disabled={disabled}
               className='border p-2 text-sm'>
               <option value='elimination'>Elimination</option>
               <option value='roundRobin'>Round robin</option>
@@ -88,6 +91,7 @@ const StageConfig: React.FC<StageConfigProps> = ({ stage }) => {
               <Field
                 id='nb'
                 placeholder='Ex: 8'
+                disabled={disabled}
                 name={`stages.${stage.id}.nbParticipants`}
                 className='border p-2'
               />

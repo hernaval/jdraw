@@ -1,15 +1,20 @@
 import DrawFormatSelector from '@/components/block/draw-format-selector'
 import getDelegationList from '@/feature/delegation/get-delegation-list'
+import { getDrawConfig } from '@/feature/draw/get-draw-config'
 import { AthletEntity } from '@/types/model/athlet'
-import React, { Suspense } from 'react'
+import { StageConfig } from '@prisma/client'
+import React, { Suspense, useState } from 'react'
 
 const DrawFormatPage = async ({ searchParams, params }: any) => {
   const competition = params.name
-  console.log(params)
   const athlets: AthletEntity[] = await getDelegationList({
     category: params.category,
     competition: competition,
   })
+  const drawConfig: StageConfig | null = await getDrawConfig(
+    competition,
+    params.category
+  )
 
   return (
     <div className='mt-8'>
@@ -21,6 +26,7 @@ const DrawFormatPage = async ({ searchParams, params }: any) => {
           athletsCount={athlets.length}
           category={params.category}
           competition={competition}
+          configDone={drawConfig != null}
         />
       </Suspense>
     </div>

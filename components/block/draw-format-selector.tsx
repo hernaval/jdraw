@@ -1,6 +1,15 @@
 'use client'
 
-import { Network, Table2, Bolt, Info, Plus, Settings } from 'lucide-react'
+import {
+  Network,
+  Table2,
+  Bolt,
+  Info,
+  Plus,
+  Settings,
+  Save,
+  StepForward,
+} from 'lucide-react'
 import React, { useRef, useState } from 'react'
 import DrawFormatCard from './draw-format-card'
 import { DrawFormatEnum } from '@/types/model/draw-format'
@@ -19,8 +28,9 @@ import {
   ROUND_ROBIN_PHASE,
 } from '@/lib/constants'
 import { produce } from 'immer'
-import AthletCard from './athlet-card'
 import { saveDrawConfig } from '@/feature/draw/save-draw-config'
+import ActionButton from '../action/action-button'
+import LinkButton from '../action/link-button'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -32,11 +42,13 @@ interface DrawFormatSelectorProps {
   athletsCount: number
   competition: string
   category: string
+  configDone: boolean
 }
 const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   athletsCount,
   competition,
   category,
+  configDone,
 }) => {
   const drawRef = useRef(null)
   const { toast } = useToast()
@@ -44,6 +56,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   const [drawFormat, setDrawFormat] = useState<DrawFormatEnum>(
     DrawFormatEnum.ELIMINATION
   )
+  const [configFinished, setconfigFinished] = useState(configDone)
   const [initialFormValueStage, setInitialFormValueStage] = useState({
     stages: [
       {
@@ -114,6 +127,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
 
     console.log('from values after ranked', competition, category, stages)
     await saveDrawConfig(competition, category, stages).then(response => {
+      setconfigFinished(true)
       toast({
         title: 'Configuration réussie',
         description:
@@ -206,14 +220,23 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
             <h4 className='text-xl'>Configuration </h4>
             <Settings size={24} />
           </div>
-          <Button
-            type='button'
-            onClick={() => {
-              const ref: any = drawRef.current
-              if (ref) ref.submitForm()
-            }}>
-            Enregistrer
-          </Button>
+          {configFinished && (
+            <LinkButton
+              label='Passer au tirage'
+              icon={<StepForward />}
+              href={`/competition/${competition}/board/draw/${category}/bracket`}
+            />
+          )}
+          {!configFinished && (
+            <ActionButton
+              label='Enregister'
+              icon={<Save />}
+              onClick={() => {
+                const ref: any = drawRef.current
+                if (ref) ref.submitForm()
+              }}
+            />
+          )}
         </div>
         <Separator className='my-4' />
 

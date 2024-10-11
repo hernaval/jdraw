@@ -13,6 +13,13 @@ import { FieldArray, Form, Formik } from 'formik'
 import { Button } from '../ui/button'
 import stageValidation from '../feature/stageValidation'
 import { useStageStore } from '@/lib/store/stage-ranked-store'
+import {
+  CUSTOM_PHASE,
+  ELIMINATION_PHASE,
+  ROUND_ROBIN_PHASE,
+} from '@/lib/constants'
+import { produce } from 'immer'
+import AthletCard from './athlet-card'
 
 const formatGuide = {
   0: 'Elimation explication',
@@ -51,7 +58,7 @@ const initialStage: { [key: string]: Stage[] } = {
   stages: [
     {
       isFinal: false,
-      format: 'elimination',
+      format: ELIMINATION_PHASE,
       nbParticipants: 0,
     },
   ],
@@ -69,8 +76,35 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   const [drawFormat, setDrawFormat] = useState<DrawFormatEnum>(
     DrawFormatEnum.ELIMINATION
   )
-  const handleCustomFormat = () => {
-    setDrawFormat(DrawFormatEnum.CUSTOM)
+  const [initialFormValueStage, setInitialFormValueStage] = useState({
+    stages: [
+      {
+        isFinal: false,
+        format: ELIMINATION_PHASE,
+        nbParticipants: athletsCount,
+      },
+    ],
+  })
+  const handleFormatChange = (format: string) => {
+    setInitialFormValueStage(
+      produce(initialFormValueStage, draft => {
+        ;(draft.stages[0].nbParticipants =
+          format === CUSTOM_PHASE ? 0 : athletsCount),
+          (draft.stages[0].format =
+            format === CUSTOM_PHASE ? ELIMINATION_PHASE : format)
+      })
+    )
+    if (format === ELIMINATION_PHASE) {
+      setDrawFormat(DrawFormatEnum.ELIMINATION)
+      return
+    }
+    if (format === ROUND_ROBIN_PHASE) {
+      setDrawFormat(DrawFormatEnum.ROUND_ROBIN)
+      return
+    }
+    if (format === CUSTOM_PHASE) {
+      setDrawFormat(DrawFormatEnum.CUSTOM)
+    }
   }
 
   const addStage = (push: any) => {
@@ -99,7 +133,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
   const createStages = async (values: any) => {
     const stages: Stage[] = values.stages
     if (drawFormat == DrawFormatEnum.CUSTOM) {
-      createStagesForCustom(stages)
+      validateCustomStage(stages)
     }
     stages.forEach((s, index) => {
       if (s.isFinal) {
@@ -113,7 +147,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
     console.log('from values after ranked', stages)
   }
 
-  const createStagesForCustom = (stages: Stage[]) => {
+  const validateCustomStage = (stages: Stage[]) => {
     if (stageValidation.customFormatOnlyOneStage(stages)) {
       toast({
         title: 'Problème de configuration',
@@ -171,19 +205,19 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
 
       <div className='flex flex-col  gap-8 md:flex-row mt-16'>
         <DrawFormatCard
-          onClick={() => setDrawFormat(DrawFormatEnum.ELIMINATION)}
+          onClick={() => handleFormatChange(ELIMINATION_PHASE)}
           active={drawFormat == DrawFormatEnum.ELIMINATION}
           icon={<Network />}
           title='Elimination directe'
         />
         <DrawFormatCard
-          onClick={() => setDrawFormat(DrawFormatEnum.ROUND_ROBIN)}
+          onClick={() => handleFormatChange(ROUND_ROBIN_PHASE)}
           active={drawFormat == DrawFormatEnum.ROUND_ROBIN}
           icon={<Table2 />}
           title='Round robin'
         />
         <DrawFormatCard
-          onClick={handleCustomFormat}
+          onClick={() => handleFormatChange(CUSTOM_PHASE)}
           active={drawFormat == DrawFormatEnum.CUSTOM}
           icon={<Bolt />}
           title='Personnalisé'
@@ -208,8 +242,9 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
         <Separator className='my-4' />
 
         <Formik
-          initialValues={initialStage}
+          initialValues={initialFormValueStage}
           onSubmit={createStages}
+          enableReinitialize={true}
           innerRef={drawRef}>
           {({ values }) => (
             <Form>
@@ -219,6 +254,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
                     {values.stages.length > 0 &&
                       values.stages.map((stage, index) => (
                         <StageConfig
+                          disabled={drawFormat !== DrawFormatEnum.CUSTOM}
                           key={index}
                           stage={{ ...stage, id: index }}
                         />

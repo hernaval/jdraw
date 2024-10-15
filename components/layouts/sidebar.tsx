@@ -6,7 +6,7 @@ import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { boardMenu } from '@/app/competition/[name]/board/menu'
 
-const Sidebar = ({ params }: { params: { name: string } }) => {
+const Sidebar = ({ params }: { params?: { name: string } }) => {
   const { name } = useParams()
   const pathname: string = usePathname()
 

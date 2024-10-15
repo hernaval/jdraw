@@ -4,7 +4,7 @@ export interface MatchEntity {
   id: number
   position: number
   round?: number
-  whiteAthlet?: Partial<AthletEntity>
+  whiteAthlet: Partial<AthletEntity> | null
   blueAthlet: Partial<AthletEntity> | null
   whitePlaceholder?: string
   bluePlaceholder?: string

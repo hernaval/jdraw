@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ReactNode } from 'react'
+import React, { HTMLAttributes, ReactNode } from 'react'
 import { Button } from '../ui/button'
 
 export interface ActionButtonProps {
@@ -9,15 +9,16 @@ export interface ActionButtonProps {
   variant?: any
   onClick?: () => void
 }
-const ActionButton: React.FC<ActionButtonProps> = ({
+const ActionButton: React.FC<ActionButtonProps & HTMLAttributes<any>> = ({
   label,
   variant = 'default',
   icon,
   onClick,
+  ...props
 }) => {
   return (
     <div>
-      <Button variant={variant} onClick={onClick}>
+      <Button variant={variant} onClick={onClick} {...props}>
         {icon} {label}
       </Button>
     </div>

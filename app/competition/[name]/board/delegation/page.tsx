@@ -1,3 +1,4 @@
+import LinkButton from '@/components/action/link-button'
 import AthletCard from '@/components/block/athlet-card'
 import AthletPerClub from '@/components/block/athlet-per-club'
 import DoubleTable from '@/components/block/double-table'
@@ -50,9 +51,14 @@ const DelegationList = async ({ searchParams, params }: any) => {
       <Suspense fallback='Loading...'>
         <div className='flex justify-between'>
           <Filter title='Filtre' filters={filters} />
-          <Link href={`/competition/${competition}/board/delegation/checking`}>
-            <Button>Charger un document</Button>
-          </Link>
+          <LinkButton
+            href={`/competition/${competition}/board/delegation/checking`}
+            label='Charger une délégation '
+            className='bg-gold text-primary hover:bg-gold '
+          />
+          {/* <Link href={`/competition/${competition}/board/delegation/checking`}>
+            <Button variant="default" className='bg-gold-100' >Charger un document</Button>
+          </Link> */}
         </div>
       </Suspense>
 

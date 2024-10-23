@@ -45,7 +45,7 @@ const Header = () => {
         <Input
           type='search'
           placeholder='Trouver quelques choses...'
-          className='w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]'
+          className='w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px] border-goldp'
         />
       </div>
       <DropdownMenu>
@@ -53,8 +53,8 @@ const Header = () => {
           <Button
             variant='outline'
             size='icon'
-            className='overflow-hidden rounded-full'>
-            <User className='overflow-hidden rounded' />
+            className='overflow-hidden rounded-full bg-gold hover:bg-gold'>
+            <User className='overflow-hidden ' />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

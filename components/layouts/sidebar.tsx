@@ -11,7 +11,7 @@ const Sidebar = ({ params }: { params?: { name: string } }) => {
   const pathname: string = usePathname()
 
   return (
-    <aside className='fixed inset-y-0 left-0 z-10 hidden w-28 flex flex-col items-center justify-between border-r bg-background sm:flex'>
+    <aside className='fixed inset-y-0 left-0 z-10 hidden w-28 flex flex-col items-center justify-between border-r bg-neutral sm:flex'>
       <div>
         <Image alt='jdraw logo' src='/logo.svg' width={70} height={50} />
       </div>

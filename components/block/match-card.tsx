@@ -68,7 +68,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
       <Card
         className={cn(
           'w-52 h-16 bg-white shadow-sm py-2',
-          highlighted && 'border border-blue-900'
+          highlighted && 'border border-gold'
         )}>
         <div className='flex flex-col '>
           <AthletRow athlet={match.whiteAthlet} />

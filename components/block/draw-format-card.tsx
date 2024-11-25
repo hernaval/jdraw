@@ -27,7 +27,7 @@ const DrawFormatCard: React.FC<DrawFormatCardProps> = ({
           <div key={i}>{icon}</div>
         ))}
       </div>
-      {active && <CircleCheckBig color='green' className='mt-2' />}
+      {active && <CircleCheckBig color='gold' className='mt-2' />}
     </div>
   )
 }

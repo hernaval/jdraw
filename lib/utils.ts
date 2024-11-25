@@ -32,3 +32,21 @@ export function shuffleArray(array: any[]) {
   }
   return array
 }
+
+export function fillArrayAlt(
+  output: any[],
+  input: any[],
+  from: number,
+  to: number
+) {
+  let low = from
+  let high = to
+  let i = 0
+
+  while (low <= high && i < input.length) {
+    output[low++] = input[i++]
+    if (low < high) {
+      output[high--] = input[i++]
+    }
+  }
+}

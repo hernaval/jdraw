@@ -36,6 +36,10 @@ model Athlet {
   competition String @default("")
    club Club @relation(fields: [clubId], references: [id])
    clubId Int
+
+   matchAsWhite Match[] @relation("whiteAthlet")
+   matchAsBlue Match[] @relation("blueAthlet")
+   matchAsWinner Match[] @relation("winnerAthlet")
 }
 
 model Competition { 
@@ -60,4 +64,21 @@ model StageConfig {
 
   // ensure each competition and weight category pair is unique
   @@unique([competition, weightCategory])
+}
+
+model Match {
+  id               Int  @id @default(autoincrement())
+  position         Int
+  round Int
+  whiteAthletId    Int 
+  blueAthletId     Int 
+  whitePlaceholder String
+  bluePlaceholder String 
+  nextMatchId     Int 
+  winnerAthletId Int 
+  orderNo        Int  
+
+  whiteAthlet Athlet @relation("whiteAthlet", fields: [whiteAthletId], references: [id])
+  blueAthlet Athlet @relation("blueAthlet", fields: [blueAthletId], references: [id])
+  winnerAthlet Athlet @relation("winnerAthlet", fields: [winnerAthletId], references: [id])
 }

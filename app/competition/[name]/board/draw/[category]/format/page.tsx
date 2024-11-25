@@ -26,7 +26,7 @@ const DrawFormatPage = async ({ searchParams, params }: any) => {
           athletsCount={athlets.length}
           category={params.category}
           competition={competition}
-          configDone={drawConfig != null}
+          configDone={drawConfig != null && drawConfig.generated == true}
         />
       </Suspense>
     </div>

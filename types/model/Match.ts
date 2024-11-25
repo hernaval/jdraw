@@ -1,7 +1,7 @@
 import { AthletEntity } from './athlet'
 
 export interface MatchEntity {
-  id: number
+  id?: number
   position: number
   round?: number
   whiteAthlet: Partial<AthletEntity> | null

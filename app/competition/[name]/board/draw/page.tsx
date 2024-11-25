@@ -9,7 +9,6 @@ import { FilterSelect } from '@/types/FilterSelect'
 import { AthletEntity } from '@/types/model/athlet'
 import { WeightCategoryEntity } from '@/types/model/WeightCategory'
 import { Settings } from 'lucide-react'
-import Link from 'next/link'
 import React, { Suspense } from 'react'
 
 const DrawList = async ({ searchParams, params }: any) => {

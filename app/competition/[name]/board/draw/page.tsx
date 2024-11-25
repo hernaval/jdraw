@@ -1,3 +1,4 @@
+import LinkButton from '@/components/action/link-button'
 import AthletCard from '@/components/block/athlet-card'
 import Filter from '@/components/block/filter'
 import { Button } from '@/components/ui/button'
@@ -34,14 +35,13 @@ const DrawList = async ({ searchParams, params }: any) => {
       <Suspense fallback='Loading...'>
         <div className='flex justify-between'>
           <Filter title='Filtre' filters={filters} />
-          <Link
-            href={`/competition/${competition}/board/draw/${searchParams.category}/format`}>
-            <Button
-              disabled={searchParams.category == undefined}
-              className='gap-2'>
-              <Settings /> Configurer le tirage
-            </Button>
-          </Link>
+          <LinkButton
+            disabled={searchParams.category == undefined}
+            href={`/competition/${competition}/board/draw/${searchParams.category}/format`}
+            label='Configurer le tirage'
+            className='bg-gold text-primary hover:bg-gold'
+            icon={<Settings />}
+          />
         </div>
       </Suspense>
 

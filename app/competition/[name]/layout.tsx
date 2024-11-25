@@ -17,14 +17,12 @@ export default function BoardLayout({
         <Header />
         <main
           className='h-full grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 mt-6 bg-center'
-          style={{
-            // backgroundImage: `url('/bg-accent.avif')`,
-            // background: 'linear-gradient(135deg, #bcdde4, #d0e6e2)',
-            background:
-              'linear-gradient(135deg, rgba(188, 221, 228, 0.7), rgba(208, 230, 226, 0.7), rgba(238, 238, 245, 0.7))',
-
-            backgroundRepeat: 'repeat',
-          }}>
+          // style={{
+          //   background:
+          //     'linear-gradient(135deg, rgba(188, 221, 228, 0.7), rgba(208, 230, 226, 0.7), rgba(238, 238, 245, 0.7))',
+          //   backgroundRepeat: 'repeat',
+          // }}
+        >
           {children}
         </main>
         {/* <footer className="mt-auto border-t bg-muted/40 py-6 text-center text-sm text-muted-foreground">

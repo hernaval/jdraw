@@ -223,6 +223,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
           {configFinished && (
             <LinkButton
               label='Passer au tirage'
+              className='bg-gold text-primary hover:bg-gold'
               icon={<StepForward />}
               href={`/competition/${competition}/board/draw/${category}/bracket`}
             />

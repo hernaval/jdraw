@@ -5,6 +5,9 @@ import { fillArrayAlt, shuffleArray } from '@/lib/utils'
 export class SingleElimination extends MatchGenerator {
   generate(): MatchEntity[] {
     const N = this.athlets.length
+    if (N < 2) {
+      throw Error('SingleElimination must have at least 2 athlets')
+    }
     // total slots as the next power of 2 of N
     const totalSlots = Math.pow(2, Math.ceil(Math.log2(N)))
     const byes = totalSlots - N
@@ -21,7 +24,7 @@ export class SingleElimination extends MatchGenerator {
         position: i,
         whiteAthlet: competitors[i],
         blueAthlet: null,
-        winnerAthlet: null,
+        winnerAthlet: competitors[i],
       })
     }
     for (let i = byes; i < N; i += 2) {
@@ -52,11 +55,13 @@ export class SingleElimination extends MatchGenerator {
     )
 
     // fill empty match with byes
+    // put match order number
     let i = 0
     matchBracket.forEach((b, index) => {
       if (!matchBracket[index]) {
         matchBracket[index] = byesMatches[i++]
       }
+      matchBracket[index].position = index + 1 // skip 0
     })
 
     return matchBracket

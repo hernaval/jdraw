@@ -10,5 +10,4 @@ export interface MatchEntity {
   bluePlaceholder?: string
   nextMatchId?: number
   winnerAthlet: Partial<AthletEntity> | null
-  orderNo?: number
 }

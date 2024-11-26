@@ -69,16 +69,15 @@ model StageConfig {
 model Match {
   id               Int  @id @default(autoincrement())
   position         Int
-  round Int
+  round Int?
   whiteAthletId    Int 
-  blueAthletId     Int 
-  whitePlaceholder String
-  bluePlaceholder String 
-  nextMatchId     Int 
-  winnerAthletId Int 
-  orderNo        Int  
+  blueAthletId     Int? 
+  whitePlaceholder String?
+  bluePlaceholder String? 
+  nextMatchId     Int? 
+  winnerAthletId Int? 
 
   whiteAthlet Athlet @relation("whiteAthlet", fields: [whiteAthletId], references: [id])
-  blueAthlet Athlet @relation("blueAthlet", fields: [blueAthletId], references: [id])
-  winnerAthlet Athlet @relation("winnerAthlet", fields: [winnerAthletId], references: [id])
+  blueAthlet Athlet? @relation("blueAthlet", fields: [blueAthletId], references: [id])
+  winnerAthlet Athlet? @relation("winnerAthlet", fields: [winnerAthletId], references: [id])
 }

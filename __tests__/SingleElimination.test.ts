@@ -3,12 +3,16 @@ import { MatchEntity } from '@/types/model/Match'
 import { Athlet } from '@prisma/client'
 
 describe('Single Elimination match generation', () => {
-  it('has correct match number', () => {
-    const athlets: Array<Partial<Athlet>> = athletBuilder(10)
+  it.each([
+    { totalAthlets: 10, expectedMatch: 8 },
+    { totalAthlets: 11, expectedMatch: 8 },
+    { totalAthlets: 4, expectedMatch: 2 },
+  ])('.calculateMatch(%i)', ({ totalAthlets, expectedMatch }) => {
+    const athlets: Array<Partial<Athlet>> = athletBuilder(totalAthlets)
     const generator = new SingleElimination(athlets)
     const matches: MatchEntity[] = generator.generate()
 
-    expect(matches.length).toBe(8)
+    expect(matches.length).toBe(expectedMatch)
   })
   it('all athlets have opponent when number of participants is power of 2', () => {
     const athlets: Array<Partial<Athlet>> = athletBuilder(16)
@@ -24,7 +28,7 @@ describe('Single Elimination match generation', () => {
     { totalAthlets: 11, expectedByes: 5 },
     { totalAthlets: 10, expectedByes: 6 },
     { totalAthlets: 21, expectedByes: 11 },
-  ])('.generate(%i, %i)', ({ totalAthlets, expectedByes }) => {
+  ])('.generate(%i)', ({ totalAthlets, expectedByes }) => {
     const athlets: Array<Partial<Athlet>> = athletBuilder(Number(totalAthlets))
     const generator = new SingleElimination(athlets)
     const matches: MatchEntity[] = generator.generate()

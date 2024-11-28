@@ -67,12 +67,13 @@ const BracketTree: React.FC<BracketTreeProps> = ({
         const competitor: Competitor = competitors.find(
           c => c.position == matchIndex + 1 && c.judogi == position
         )!
+        if (!competitor.firstname || !competitor.lastname) continue // ignore animation for byes
         console.log('cmopetitor', competitor)
         setCurrentCompetitor(competitor)
 
         await new Promise(resolve => setTimeout(resolve, 1000))
 
-        setHighlightedMatch(match.id)
+        setHighlightedMatch(match.id!!)
 
         // active the highlight in bracket card
         await new Promise(resolve => setTimeout(resolve, 700))

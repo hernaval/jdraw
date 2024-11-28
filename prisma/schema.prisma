@@ -64,6 +64,7 @@ model StageConfig {
 
   // ensure each competition and weight category pair is unique
   @@unique([competition, weightCategory])
+  Match Match[] @relation("stageConfig")
 }
 
 model Match {
@@ -76,8 +77,10 @@ model Match {
   bluePlaceholder String? 
   nextMatchId     Int? 
   winnerAthletId Int? 
+  stageConfigId Int 
 
   whiteAthlet Athlet @relation("whiteAthlet", fields: [whiteAthletId], references: [id])
   blueAthlet Athlet? @relation("blueAthlet", fields: [blueAthletId], references: [id])
   winnerAthlet Athlet? @relation("winnerAthlet", fields: [winnerAthletId], references: [id])
+  stageConfig StageConfig @relation("stageConfig",fields: [stageConfigId], references: [id])
 }

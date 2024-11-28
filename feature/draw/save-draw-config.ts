@@ -58,6 +58,7 @@ export async function saveDrawConfig(
                 blueAthletId: bracket.blueAthlet?.id,
                 winnerAthletId: bracket.winnerAthlet?.id,
                 position: bracket.position,
+                stageConfigId: config.id,
                 round: 1, // Draw generates first round
               },
             })

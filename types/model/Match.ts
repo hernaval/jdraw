@@ -1,7 +1,8 @@
+import { StageConfig } from '@prisma/client'
 import { AthletEntity } from './athlet'
 
 export interface MatchEntity {
-  id: number
+  id?: number
   position: number
   round?: number
   whiteAthlet: Partial<AthletEntity> | null
@@ -10,5 +11,5 @@ export interface MatchEntity {
   bluePlaceholder?: string
   nextMatchId?: number
   winnerAthlet: Partial<AthletEntity> | null
-  orderNo?: number
+  stageConfig?: StageConfig
 }

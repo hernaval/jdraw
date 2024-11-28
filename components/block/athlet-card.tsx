@@ -19,17 +19,17 @@ const AthletCard: React.FC<AthetCardProps> = ({ athlet }) => {
                 {athlet.lastname[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <p className='text-sm'>{athlet.club.name}</p>
+            <p className='text-sm text-gold'>{athlet.club.name}</p>
           </div>
           <div className='grid gap-1'>
-            <p className='text-sm font-medium leading-none'>
+            <p className='text-sm font-bold leading-none'>
               {athlet.firstname} {athlet.lastname}
             </p>
             <p className='text-sm text-muted-foreground'>
               Catégorie <span className='font-bold'>{athlet.weight}kg</span>
             </p>
           </div>
-          <div className='ml-auto font-medium '>{athlet.sex}</div>
+          <div className='ml-auto font-medium text-gold'>{athlet.sex}</div>
         </div>
       </CardContent>
     </Card>

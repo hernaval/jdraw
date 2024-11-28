@@ -19,7 +19,6 @@ import StageConfig from './stage-config'
 import { Stage } from '@/types/model/Stage'
 import { useToast } from '@/hooks/use-toast'
 import { FieldArray, Form, Formik } from 'formik'
-import { Button } from '../ui/button'
 import stageValidation from '../feature/stageValidation'
 import { useStageStore } from '@/lib/store/stage-ranked-store'
 import {
@@ -223,6 +222,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
           {configFinished && (
             <LinkButton
               label='Passer au tirage'
+              className='bg-gold text-primary hover:bg-gold'
               icon={<StepForward />}
               href={`/competition/${competition}/board/draw/${category}/bracket`}
             />
@@ -230,6 +230,7 @@ const DrawFormatSelector: React.FC<DrawFormatSelectorProps> = ({
           {!configFinished && (
             <ActionButton
               label='Enregister'
+              className='bg-gold text-primary hover:bg-gold'
               icon={<Save />}
               onClick={() => {
                 const ref: any = drawRef.current

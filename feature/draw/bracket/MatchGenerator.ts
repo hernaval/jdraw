@@ -1,8 +1,8 @@
 import { MatchEntity } from '@/types/model/Match'
-import { TournamentBracket } from './TournamentBracket'
+import { TournamentDraw } from './TournamentDraw'
 import { Athlet } from '@prisma/client'
 
-export abstract class MatchGenerator implements TournamentBracket {
+export abstract class MatchGenerator implements TournamentDraw {
   protected athlets: Array<Partial<Athlet>>
 
   constructor(athlets: Array<Partial<Athlet>>) {

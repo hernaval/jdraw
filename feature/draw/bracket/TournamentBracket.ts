@@ -1,5 +1,5 @@
-import { MatchEntity } from '@/types/model/Match'
+import { BracketEntity } from '@/types/model/Bracket'
 
 export interface TournamentBracket {
-  generate(): MatchEntity[]
+  generate(): BracketEntity[]
 }

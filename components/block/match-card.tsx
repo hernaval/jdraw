@@ -30,7 +30,9 @@ const AthletRow: React.FC<AthletRowProps> = ({
         'flex items-center justify-between'
       )}>
       <div className='flex items-center pl-1'>
-        <span className='text-2xs text-gray-500 rotate-[-90deg] m-0'>CJC</span>
+        <span className='text-2xs text-gray-500 rotate-[-90deg] m-0'>
+          {athlet?.club?.name}
+        </span>
         <Flag />
         <motion.span
           key={athlet?.firstname}

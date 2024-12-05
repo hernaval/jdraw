@@ -2,13 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const useTimer = (initialTime: number) => {
   const [timeLeft, setTimeLeft] = useState(initialTime) // Starting at 10 seconds
-  const [isPaused, setIsPaused] = useState<boolean>(false)
+  const [isPaused, setIsPaused] = useState<boolean>(true)
 
-  let intval: any = null
+  const intval: any = useRef(null)
   const startTime = useCallback(() => {
-    if (intval || isPaused) return
     setIsPaused(false)
-    intval = setInterval(() => {
+    console.log(intval)
+    if (intval.current) return
+    intval.current = setInterval(() => {
       setTimeLeft(prevTime => {
         if (prevTime <= 0) {
           stopTime()
@@ -17,12 +18,22 @@ const useTimer = (initialTime: number) => {
         return prevTime - 1
       })
     }, 1000)
-  }, [timeLeft, isPaused])
+  }, [timeLeft])
+
+  const playOrPause = () => {
+    if (isPaused) {
+      startTime()
+    } else {
+      stopTime()
+    }
+  }
 
   const stopTime = () => {
-    clearInterval(intval)
-    intval = null
     setIsPaused(true)
+    if (intval.current) {
+      clearInterval(intval.current)
+      intval.current = null
+    }
   }
   useEffect(() => {
     if (timeLeft == 0) stopTime()
@@ -31,6 +42,6 @@ const useTimer = (initialTime: number) => {
     }
   }, [])
 
-  return { timeLeft, isPaused, startTime, stopTime }
+  return { timeLeft, isPaused, playOrPause, startTime, stopTime }
 }
 export default useTimer

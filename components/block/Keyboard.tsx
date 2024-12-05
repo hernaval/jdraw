@@ -10,17 +10,15 @@ const specialKeys = {
 interface KeyProps {
   children: React.ReactNode
   className?: string
-  isSpace?: boolean
 }
 
-const Key: React.FC<KeyProps> = ({ children, className, isSpace = false }) => (
+const Key: React.FC<KeyProps> = ({ children, className }) => (
   <button
     className={cn(
       'bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg shadow',
       'transition-all duration-200 ease-in-out',
       'hover:bg-gray-300 hover:shadow-md hover:-translate-y-0.5',
       'focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50',
-      isSpace && 'relative',
       className
     )}>
     {children}
@@ -48,7 +46,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ layout }) => {
         ))}
         <div className='flex justify-center space-x-2 mt-8'>
           <Key className='w-20'>Alt</Key>
-          <Key className={specialKeys.Space.width} isSpace={true}>
+          <Key className={specialKeys.Space.width}>
             {specialKeys.Space.text}
           </Key>
         </div>

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 const specialKeys = {
   Enter: { width: 'w-20', text: '↵' },
   Space: { width: 'w-64', text: '' },
+  Shift: { width: 'w-20', text: '⇧' },
 }
 
 interface KeyProps {
@@ -34,6 +35,11 @@ const Keyboard: React.FC<KeyboardProps> = ({ layout }) => {
       <div className='space-y-2'>
         {layout.map((row, rowIndex) => (
           <div key={rowIndex} className='flex justify-center space-x-2'>
+            {rowIndex === 2 && (
+              <Key className={specialKeys.Shift.width}>
+                {specialKeys.Shift.text}
+              </Key>
+            )}
             {row.map(key => (
               <Key key={key}>{key}</Key>
             ))}

@@ -27,11 +27,31 @@ interface ControlPanelProps {
 }
 const ControlPanel: React.FC<ControlPanelProps> = ({ scoring }) => {
   const { timeLeft, playOrPause, isPaused } = useTimer(4 * 60) // 4 minutes
-  const { giveIppon, giveWazari, giveShido, scores } = useScore(scoring)
+  const {
+    giveIppon,
+    giveWazari,
+    giveShido,
+    removeShido,
+    removeWazari,
+    removeIppon,
+    scores,
+  } = useScore(scoring)
   const scoreCommand = (
     judogiColor: 'white' | 'blue',
-    { ippon }: { ippon: boolean } = { ippon: false }
+    { ippon, cancel }: { ippon?: boolean; cancel?: boolean } = {
+      ippon: false,
+      cancel: false,
+    }
+    // { cancel }: { cancel: boolean } = { cancel: false }
   ) => {
+    if (cancel) {
+      if (ippon) {
+        removeIppon(judogiColor)
+      } else {
+        removeWazari(judogiColor)
+      }
+      return
+    }
     if (ippon) {
       giveIppon(judogiColor)
     } else {
@@ -39,8 +59,15 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring }) => {
     }
   }
 
-  const penaltiesCommand = (judogiColor: 'white' | 'blue') => {
-    giveShido(judogiColor)
+  const penaltiesCommand = (
+    judogiColor: 'white' | 'blue',
+    { cancel }: { cancel: boolean } = { cancel: false }
+  ) => {
+    if (cancel) {
+      removeShido(judogiColor)
+    } else {
+      giveShido(judogiColor)
+    }
   }
 
   useKeyboardListener({
@@ -52,6 +79,13 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring }) => {
     h: () => scoreCommand('blue', { ippon: true }),
     s: () => penaltiesCommand('white'),
     j: () => penaltiesCommand('blue'),
+
+    W: () => scoreCommand('white', { cancel: true }),
+    U: () => scoreCommand('blue', { cancel: true }),
+    A: () => scoreCommand('white', { ippon: true, cancel: true }),
+    H: () => scoreCommand('blue', { ippon: true, cancel: true }),
+    S: () => penaltiesCommand('white', { cancel: true }),
+    J: () => penaltiesCommand('blue', { cancel: true }),
   })
   return (
     <div>

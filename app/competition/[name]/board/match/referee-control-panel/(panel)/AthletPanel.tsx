@@ -20,7 +20,7 @@ const ShidoCard: React.FC<{ count: number }> = ({ count }) => (
         key={i}
         className={cn(
           ' h-20 w-20 absolute right-16 shadow-md rounded-none border-none',
-          count == 3 ? ' bg-red-300' : ' bg-yellow-300'
+          count == 3 ? ' bg-destructive' : ' bg-yellow-300'
         )}
         style={{
           transform: `rotate(${i * 7 - 7.5}deg)`,
@@ -54,7 +54,7 @@ const ScoringRow: React.FC<ScoringRowProps> = ({ score, player }) => {
         </div>
       </div>
       <div className=''>
-        <ShidoCard count={2} />
+        <ShidoCard count={score.shido} />
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 import { sum } from '@/lib/math'
 import { ParticipantSummary, Clubs } from '@/types/ParticipantSummary'
 import { getWeighCategory } from '../get-weigth-category'
+import prisma from '@/lib/prisma'
 
 export async function getDelegationSummary(
   competition: string

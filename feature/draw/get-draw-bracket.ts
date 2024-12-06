@@ -2,6 +2,7 @@ import { BracketEntity } from '@/types/model/Bracket'
 import { MatchEntity } from '@/types/model/Match'
 import { FullKnockout } from './bracket/FullKnockout'
 import { Match } from '@prisma/client'
+import prisma from '@/lib/prisma'
 
 export async function getDrawBracket(
   competition: string,

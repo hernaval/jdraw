@@ -1,4 +1,5 @@
 import { AthletEntity } from '@/types/model/athlet'
+import prisma from '@/lib/prisma'
 
 export default async function getDelegationList(query?: {
   club?: string

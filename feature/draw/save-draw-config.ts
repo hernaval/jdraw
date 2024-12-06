@@ -7,6 +7,7 @@ import { GeneratorFactory } from './bracket/GeneratorFactory'
 import { AthletEntity } from '@/types/model/athlet'
 import getDelegationList from '../delegation/get-delegation-list'
 import { MatchEntity } from '@/types/model/Match'
+import prisma from '@/lib/prisma'
 
 export async function saveDrawConfig(
   competition: string,

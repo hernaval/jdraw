@@ -1,4 +1,5 @@
 import { StageConfig } from '@prisma/client'
+import prisma from '@/lib/prisma'
 
 export async function getDrawConfig(
   competition: string,

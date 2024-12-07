@@ -60,6 +60,8 @@ export async function saveDrawConfig(
                 position: bracket.position,
                 stageConfigId: config.id,
                 round: 1, // Draw generates first round
+                competition,
+                weightCategory,
               },
             })
           )

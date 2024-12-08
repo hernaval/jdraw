@@ -3,8 +3,8 @@ import ContestList from './(components)/ContestList'
 import { BracketEntity } from '@/types/model/Bracket'
 import { Separator } from '@/components/ui/separator'
 import { getMatch } from '@/feature/match/get-match'
-import EndedContest from './(components)/EndedContest'
 import { roundNumToName } from './roundUtils'
+import EndedContest from './(components)/EndedContest'
 
 const ContestOrder = async ({ searchParams, params }: any) => {
   const competition = params.name
@@ -12,7 +12,6 @@ const ContestOrder = async ({ searchParams, params }: any) => {
   const runningMatchId: number = brackets[0].matches[0].id || 1
   return (
     <div>
-      {/* <h1 className='text-2xl'>Prochains combats</h1> */}
       {brackets.map((b, i) => (
         <div key={b.round} className='mt-8'>
           <div className='sticky top-0 mb-4'>

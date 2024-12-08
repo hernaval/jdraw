@@ -13,6 +13,4 @@ export interface MatchEntity {
   winnerAthlet: Partial<AthletEntity> | null
   stageConfig?: StageConfig
   finished: boolean
-  competition: string
-  weightCategory: string
 }

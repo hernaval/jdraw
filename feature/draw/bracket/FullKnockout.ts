@@ -30,6 +30,7 @@ export class FullKnockout implements TournamentBracket {
               weightCategory: '',
               generated: false,
             },
+            finished: false,
           })
         ),
       })

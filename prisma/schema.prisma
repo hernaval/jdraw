@@ -78,6 +78,8 @@ model Match {
   nextMatchId     Int? 
   winnerAthletId Int? 
   stageConfigId Int 
+  finished      Boolean @default(false)
+  
 
   whiteAthlet Athlet @relation("whiteAthlet", fields: [whiteAthletId], references: [id])
   blueAthlet Athlet? @relation("blueAthlet", fields: [blueAthletId], references: [id])

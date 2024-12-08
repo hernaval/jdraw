@@ -24,8 +24,9 @@ const blueKeyboardLayout = [
 
 interface ControlPanelProps {
   scoring: Scoreboard
+  roundName: string
 }
-const ControlPanel: React.FC<ControlPanelProps> = ({ scoring }) => {
+const ControlPanel: React.FC<ControlPanelProps> = ({ scoring, roundName }) => {
   const { timeLeft, playOrPause, isPaused } = useTimer(4 * 60) // 4 minutes
   const {
     giveIppon,
@@ -101,7 +102,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring }) => {
           scoring={scores.bluePlayer}
         />
         <MatchPanel
-          roundName='Quart - final'
+          roundName={roundName}
           time={formatTimeAs(timeLeft)}
           isPaused={isPaused}
         />

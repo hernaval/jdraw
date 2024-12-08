@@ -1,35 +1,42 @@
 import { Scoreboard } from '@/types/model/Scoreboard'
 import ControlPanel from './(panel)/ControlPanel'
+import { getNextMatch } from '@/feature/match/get-next-match'
+import { roundNumToName } from '../contest/roundUtils'
 
-const scoring: Scoreboard = {
-  whitePlayer: {
-    player: {
-      name: 'Herinavalona',
-      club: 'CJC',
+const RefereeControlPanel = async ({ params }: any) => {
+  const competition = params.name
+  const match = await getNextMatch(competition)
+  const scoring: Scoreboard = {
+    whitePlayer: {
+      player: {
+        name: `${match.whiteAthlet?.firstname} ${match.whiteAthlet?.lastname}`,
+        club: 'CJC',
+      },
+      score: {
+        ippon: false,
+        shido: 0,
+        wazari: 0,
+      },
     },
-    score: {
-      ippon: false,
-      shido: 0,
-      wazari: 0,
+    bluePlayer: {
+      player: {
+        name: `${match.blueAthlet?.firstname} ${match.blueAthlet?.lastname}`,
+        club: 'CJC',
+      },
+      score: {
+        ippon: false,
+        shido: 0,
+        wazari: 0,
+      },
     },
-  },
-  bluePlayer: {
-    player: {
-      name: 'John Doe',
-      club: 'CJC',
-    },
-    score: {
-      ippon: false,
-      shido: 0,
-      wazari: 0,
-    },
-  },
-}
+  }
 
-const RefereeControlPanel = () => {
   return (
     <div className=''>
-      <ControlPanel scoring={scoring} />
+      <ControlPanel
+        scoring={scoring}
+        roundName={roundNumToName(match.round || 16)}
+      />
     </div>
   )
 }

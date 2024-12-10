@@ -13,6 +13,7 @@ import { MatchEntity } from '@/types/model/Match'
 import { AthletEntity } from '@/types/model/athlet'
 import { cn } from '@/lib/utils'
 import AthletWinner from './AthletWinner'
+import { setWinner } from '@/feature/match/set-winner'
 
 const whiteKeyboardLayout = [
   ['Q', 'W', 'E', 'R', 'T'],
@@ -72,7 +73,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   } = useScore(scoring)
   const [athletWinner, setAthletWinner] = useState<{
     judogiColor: string
-    athlet: string
+    athlet: Partial<AthletEntity> | null
   } | null>(null)
   const scoreCommand = (
     judogiColor: 'white' | 'blue',
@@ -122,12 +123,14 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         winPlayer == 'whitePlayer' ? 'whiteAthlet' : 'blueAthlet'
       setAthletWinner({
         judogiColor: winPlayer,
-        athlet: match[winnerKey]?.firstname || '',
+        athlet: match[winnerKey],
       })
     }
   }
 
-  const confirmWinnerCommand = () => {}
+  const confirmWinnerCommand = async () => {
+    await setWinner(match.id!!, athletWinner!!.athlet?.id!!)
+  }
 
   useKeyboardListener({
     ' ': () => playOrPause(),
@@ -154,7 +157,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
         {athletWinner ? (
           <AthletWinner
             judogiColor={athletWinner.judogiColor}
-            athlet={athletWinner.athlet}
+            athlet={`${athletWinner.athlet?.firstname} ${athletWinner.athlet?.lastname}`}
           />
         ) : (
           <>
@@ -188,6 +191,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
           <li>S: shido</li>
           <li>A: ippon</li>
           <li>D: osae-komi (not ready)</li>
+          <li>v: Affichge vainqueur</li>
+          <li>Entrer: Valider le vainqueur</li>
         </ul>
         <ul>
           <li>U: wazari</li>

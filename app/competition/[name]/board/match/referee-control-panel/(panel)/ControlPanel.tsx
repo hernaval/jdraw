@@ -1,6 +1,6 @@
 'use client'
-import { Score, Scoreboard } from '@/types/model/Scoreboard'
-import React, { useEffect, useState } from 'react'
+import { Scoreboard } from '@/types/model/Scoreboard'
+import React, { useState } from 'react'
 import AthletPanel from './AthletPanel'
 import MatchPanel from './MatchPanel'
 import Keyboard from '@/components/block/Keyboard'
@@ -8,8 +8,11 @@ import { Card } from '@/components/ui/card'
 import useKeyboardListener from '@/hooks/use-keyboard-listener'
 import useTimer from '@/hooks/use-timer'
 import { formatTimeAs } from '@/lib/date'
-import { produce } from 'immer'
 import useScore from './use-score'
+import { MatchEntity } from '@/types/model/Match'
+import { AthletEntity } from '@/types/model/athlet'
+import { cn } from '@/lib/utils'
+import AthletWinner from './AthletWinner'
 
 const whiteKeyboardLayout = [
   ['Q', 'W', 'E', 'R', 'T'],
@@ -23,11 +26,40 @@ const blueKeyboardLayout = [
 ]
 
 interface ControlPanelProps {
-  scoring: Scoreboard
+  match: MatchEntity
   roundName: string
+  category: string
 }
-const ControlPanel: React.FC<ControlPanelProps> = ({ scoring, roundName }) => {
+const ControlPanel: React.FC<ControlPanelProps> = ({
+  roundName,
+  category,
+  match,
+}) => {
   const { timeLeft, playOrPause, isPaused } = useTimer(4 * 60) // 4 minutes
+  const scoring: Scoreboard = {
+    whitePlayer: {
+      player: {
+        name: `${match.whiteAthlet?.firstname} ${match.whiteAthlet?.lastname}`,
+        club: 'CJC',
+      },
+      score: {
+        ippon: false,
+        shido: 0,
+        wazari: 0,
+      },
+    },
+    bluePlayer: {
+      player: {
+        name: `${match.blueAthlet?.firstname} ${match.blueAthlet?.lastname}`,
+        club: 'CJC',
+      },
+      score: {
+        ippon: false,
+        shido: 0,
+        wazari: 0,
+      },
+    },
+  }
   const {
     giveIppon,
     giveWazari,
@@ -36,14 +68,18 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring, roundName }) => {
     removeWazari,
     removeIppon,
     scores,
+    winner,
   } = useScore(scoring)
+  const [athletWinner, setAthletWinner] = useState<{
+    judogiColor: string
+    athlet: string
+  } | null>(null)
   const scoreCommand = (
     judogiColor: 'white' | 'blue',
     { ippon, cancel }: { ippon?: boolean; cancel?: boolean } = {
       ippon: false,
       cancel: false,
     }
-    // { cancel }: { cancel: boolean } = { cancel: false }
   ) => {
     if (cancel) {
       if (ippon) {
@@ -71,8 +107,29 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring, roundName }) => {
     }
   }
 
+  const winnerCommand = (
+    { cancel }: { cancel: boolean } = { cancel: false }
+  ) => {
+    if (cancel) {
+      setAthletWinner(null)
+      return
+    }
+    // get winner
+    const winPlayer = winner(timeLeft, scores)
+    if (winPlayer) {
+      console.log('winner ', winPlayer)
+      const winnerKey =
+        winPlayer == 'whitePlayer' ? 'whiteAthlet' : 'blueAthlet'
+      setAthletWinner({
+        judogiColor: winPlayer,
+        athlet: match[winnerKey]?.firstname || '',
+      })
+    }
+  }
+
+  const confirmWinnerCommand = () => {}
+
   useKeyboardListener({
-    Enter: () => {},
     ' ': () => playOrPause(),
     w: () => scoreCommand('white'),
     u: () => scoreCommand('blue'),
@@ -87,25 +144,38 @@ const ControlPanel: React.FC<ControlPanelProps> = ({ scoring, roundName }) => {
     H: () => scoreCommand('blue', { ippon: true, cancel: true }),
     S: () => penaltiesCommand('white', { cancel: true }),
     J: () => penaltiesCommand('blue', { cancel: true }),
+
+    v: () => winnerCommand({ cancel: athletWinner != null }),
+    Enter: () => confirmWinnerCommand(),
   })
   return (
     <div>
       <Card className='w-full p-2'>
-        <AthletPanel
-          bgColor='white'
-          textColor='black'
-          scoring={scores.whitePlayer}
-        />
-        <AthletPanel
-          bgColor='blue'
-          textColor='white'
-          scoring={scores.bluePlayer}
-        />
-        <MatchPanel
-          roundName={roundName}
-          time={formatTimeAs(timeLeft)}
-          isPaused={isPaused}
-        />
+        {athletWinner ? (
+          <AthletWinner
+            judogiColor={athletWinner.judogiColor}
+            athlet={athletWinner.athlet}
+          />
+        ) : (
+          <>
+            <AthletPanel
+              bgColor='white'
+              textColor='black'
+              scoring={scores.whitePlayer}
+            />
+            <AthletPanel
+              bgColor='blue'
+              textColor='white'
+              scoring={scores.bluePlayer}
+            />
+            <MatchPanel
+              roundName={roundName}
+              time={formatTimeAs(timeLeft)}
+              isPaused={isPaused}
+              category={category}
+            />
+          </>
+        )}
       </Card>
       <div className='flex mt-8'>
         <Keyboard layout={whiteKeyboardLayout} />

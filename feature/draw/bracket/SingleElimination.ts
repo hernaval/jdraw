@@ -26,6 +26,7 @@ export class SingleElimination extends MatchGenerator {
         blueAthlet: null,
         winnerAthlet: competitors[i],
         finished: false,
+        round: totalSlots,
       })
     }
     for (let i = byes; i < N; i += 2) {
@@ -35,6 +36,7 @@ export class SingleElimination extends MatchGenerator {
         blueAthlet: competitors[i + 1] || null,
         finished: false,
         winnerAthlet: null,
+        round: totalSlots,
       })
     }
 

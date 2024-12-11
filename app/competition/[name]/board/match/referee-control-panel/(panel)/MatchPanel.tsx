@@ -8,16 +8,20 @@ interface MatchPanelProps {
   roundName: string
   time: string
   isPaused: boolean
+  category: string
 }
 const MatchPanel: React.FC<MatchPanelProps> = ({
   roundName,
   time,
   isPaused,
+  category,
 }) => {
   return (
     <div className='flex bg-slate-700 p-5 items-center'>
       <div className='flex-1'>
-        <p className='text-white font-bold text-md'>{roundName}</p>
+        <p className='text-white font-bold text-md'>
+          {roundName} {category}
+        </p>
       </div>
       <div
         className={cn(

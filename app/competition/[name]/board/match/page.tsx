@@ -8,8 +8,16 @@ const MatchBoardPage = ({ searchParams, params }: any) => {
   return (
     <div>
       <ul>
-        <Link href='/board/match/contest'>contest</Link>
-        <Link href='/board/match/bracket'>bracket</Link>
+        <LinkButton
+          href={`/competition/${competition}/board/match/contest`}
+          label='Order des matchs'
+        />
+
+        <LinkButton
+          href={`/competition/${competition}/board/match/bracket`}
+          label='Tirages'
+        />
+
         <LinkButton
           href={`/competition/${competition}/board/match/referee-control-panel`}
           label="Ouvrir le panneau d'arbitrage"

@@ -6,37 +6,17 @@ import { roundNumToName } from '../contest/roundUtils'
 const RefereeControlPanel = async ({ params }: any) => {
   const competition = params.name
   const match = await getNextMatch(competition)
-  const scoring: Scoreboard = {
-    whitePlayer: {
-      player: {
-        name: `${match.whiteAthlet?.firstname} ${match.whiteAthlet?.lastname}`,
-        club: 'CJC',
-      },
-      score: {
-        ippon: false,
-        shido: 0,
-        wazari: 0,
-      },
-    },
-    bluePlayer: {
-      player: {
-        name: `${match.blueAthlet?.firstname} ${match.blueAthlet?.lastname}`,
-        club: 'CJC',
-      },
-      score: {
-        ippon: false,
-        shido: 0,
-        wazari: 0,
-      },
-    },
-  }
-
   return (
     <div className=''>
-      <ControlPanel
-        scoring={scoring}
-        roundName={roundNumToName(match.round || 16)}
-      />
+      {match ? (
+        <ControlPanel
+          match={match}
+          roundName={roundNumToName(match.round || 16)}
+          category={match.stageConfig?.weightCategory || ''}
+        />
+      ) : (
+        <h1>Compétition terminée</h1>
+      )}
     </div>
   )
 }

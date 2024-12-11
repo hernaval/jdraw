@@ -7,6 +7,9 @@ import { GeneratorFactory } from './bracket/GeneratorFactory'
 import { AthletEntity } from '@/types/model/athlet'
 import getDelegationList from '../delegation/get-delegation-list'
 import { MatchEntity } from '@/types/model/Match'
+import prisma from '@/lib/prisma'
+import { FullKnockout } from './bracket/FullKnockout'
+import { BracketEntity } from '@/types/model/Bracket'
 
 export async function saveDrawConfig(
   competition: string,
@@ -50,7 +53,8 @@ export async function saveDrawConfig(
           athlets
         )
         const matchBracket: MatchEntity[] = matchGenerator.generate()
-        await prisma.$transaction(
+        // console.log(matchBracket.map(m => m.position))
+        prisma.$transaction(
           matchBracket.map(bracket =>
             prisma.match.create({
               data: {
@@ -59,7 +63,7 @@ export async function saveDrawConfig(
                 winnerAthletId: bracket.winnerAthlet?.id,
                 position: bracket.position,
                 stageConfigId: config.id,
-                round: 1, // Draw generates first round
+                round: bracket.round, // Draw generates first round
               },
             })
           )

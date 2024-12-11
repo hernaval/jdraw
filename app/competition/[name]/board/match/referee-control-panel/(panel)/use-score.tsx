@@ -4,7 +4,6 @@ import { useState } from 'react'
 
 const useScore = (scoring: Scoreboard) => {
   const [scores, setScores] = useState<Scoreboard>(scoring)
-
   const giveIppon = (player: string) => {
     if (player == '') throw Error('Player to be scored must be specified')
     setScores(
@@ -51,7 +50,6 @@ const useScore = (scoring: Scoreboard) => {
             : 0
       })
     )
-    // }
   }
 
   const giveShido = (player: string) => {
@@ -78,6 +76,35 @@ const useScore = (scoring: Scoreboard) => {
       )
     }
   }
+
+  const winner = (
+    timeLeft: number,
+    score: Scoreboard
+  ): 'whitePlayer' | 'bluePlayer' | null => {
+    // search ippon
+    if (score.whitePlayer.score.ippon && score.bluePlayer.score.ippon) {
+      throw Error('Only one player can win by ippon')
+    }
+    if (score.whitePlayer.score.ippon) return 'whitePlayer'
+    if (score.bluePlayer.score.ippon) return 'bluePlayer'
+
+    // check timeLeft and search wazari
+    if (
+      score.whitePlayer.score.wazari == 1 &&
+      score.bluePlayer.score.wazari == 0 &&
+      timeLeft == 0
+    )
+      return 'whitePlayer'
+
+    if (
+      score.bluePlayer.score.wazari == 1 &&
+      score.whitePlayer.score.wazari == 0 &&
+      timeLeft == 0
+    )
+      return 'bluePlayer'
+    return null
+  }
+
   const scoringKey = (player: string) =>
     player == 'white' ? 'whitePlayer' : 'bluePlayer'
   const opponentPlayer = (player: string) =>
@@ -90,6 +117,7 @@ const useScore = (scoring: Scoreboard) => {
     removeIppon,
     removeWazari,
     scores,
+    winner,
   }
 }
 

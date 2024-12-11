@@ -12,4 +12,5 @@ export interface MatchEntity {
   nextMatchId?: number
   winnerAthlet: Partial<AthletEntity> | null
   stageConfig?: StageConfig
+  finished: boolean
 }

@@ -12,11 +12,12 @@ export class FullKnockout implements TournamentBracket {
     const brackets = this.matchToBrackets()
     const remainingRounds = this.getRemainingRounds()
     for (let i = 1; i <= remainingRounds; i++) {
-      const currentRound = remainingRounds + i
+      const lastBrackets = brackets[brackets.length - 1]
+      const currentRound = lastBrackets.round / 2
       brackets.push({
         round: currentRound,
         matches: Array.from(
-          { length: brackets[brackets.length - 1].matches.length / 2 },
+          { length: lastBrackets.matches.length / 2 },
           (v, k) => ({
             round: currentRound,
             position: 9 + k,
@@ -30,6 +31,7 @@ export class FullKnockout implements TournamentBracket {
               weightCategory: '',
               generated: false,
             },
+            finished: false,
           })
         ),
       })
@@ -47,7 +49,6 @@ export class FullKnockout implements TournamentBracket {
       }
       currentRound?.matches.push(match)
     })
-    console.log(bracket)
     return bracket
   }
   getTotalRounds() {

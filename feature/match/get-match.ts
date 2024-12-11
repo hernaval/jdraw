@@ -5,11 +5,7 @@ import { FullKnockout } from '../draw/bracket/FullKnockout'
 
 export async function getMatch(competition: string): Promise<BracketEntity[]> {
   const matches = await prisma.match.findMany({
-    orderBy: {
-      round: 'desc',
-      position: 'asc',
-    },
-
+    orderBy: [{ round: 'desc' }, { position: 'asc' }],
     where: {
       stageConfig: {
         competition,

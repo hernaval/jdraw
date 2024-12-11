@@ -14,6 +14,8 @@ import { AthletEntity } from '@/types/model/athlet'
 import { cn } from '@/lib/utils'
 import AthletWinner from './AthletWinner'
 import { setWinner } from '@/feature/match/set-winner'
+import { useRouter } from 'next/navigation'
+import { getNextMatch } from '@/feature/match/get-next-match'
 
 const whiteKeyboardLayout = [
   ['Q', 'W', 'E', 'R', 'T'],
@@ -36,6 +38,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
   category,
   match,
 }) => {
+  const router = useRouter()
   const { timeLeft, playOrPause, isPaused } = useTimer(4 * 60) // 4 minutes
   const scoring: Scoreboard = {
     whitePlayer: {
@@ -130,6 +133,8 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
 
   const confirmWinnerCommand = async () => {
     await setWinner(match.id!!, athletWinner!!.athlet?.id!!)
+
+    window.location.reload()
   }
 
   useKeyboardListener({

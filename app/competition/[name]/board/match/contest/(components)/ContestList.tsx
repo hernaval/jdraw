@@ -48,14 +48,12 @@ const ContestList: React.FC<ContestOrderProps> = ({
   return (
     <div className='grid grid-cols-3 gap-4'>
       {matches.map((m, i) => (
-        <>
-          <Contest
-            match={m}
-            key={m.position}
-            category={m.stageConfig?.weightCategory || ''}
-            running={m.id == runningMatchId}
-          />
-        </>
+        <Contest
+          match={m}
+          key={m.id}
+          category={m.stageConfig?.weightCategory || ''}
+          running={m.id == runningMatchId}
+        />
       ))}
     </div>
   )
